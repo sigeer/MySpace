@@ -36,7 +36,7 @@ namespace ViewModel
         }
         public string SaveToDb(DbContext db, Article article)
         {
-            var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`LastModifyTime`,`Status`) values(@title,@content,'" + DateTime.Now+ "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "',@status)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status) });
+            var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status),new MySqlParameter("status", article.Nohtml) });
             return result ?Message.Success:Message.Error;
         }
         public List<Article> GetArticleList(DbContext db,int start,int count)
@@ -52,11 +52,11 @@ namespace ViewModel
                 tt.Id =Convert.ToInt32(item["Id"]);
                 tt.Title = item["Title"].ToString();
                 tt.Content = item["MainContent"].ToString();
-
+                tt.Nohtml = item["Nohtml"].ToString();
+                tt.Comments = new List<Comment>();
+                tt.Histories = new List<ArticleHistory>();
                 bool flag = DateTime.TryParse(item["CreateTime"].ToString(),out dt);
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
-                flag = DateTime.TryParse(item["LastModifyTime"].ToString(),out dt);
-                tt.LastModifyTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
             return list;
@@ -92,7 +92,7 @@ namespace ViewModel
             {
                 return Message.Error;
             }
-            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')",new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) });
+            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now + "')",new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) });
             return result ? Message.Success : Message.Error;
         }
         public List<Comment> GetComments(DbContext db ,int aId)

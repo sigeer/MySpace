@@ -1,4 +1,4 @@
-var api = 'http://localhost:8085';
+var api = 'http://localhost:8082';
 var indexDiv = new Vue({
     el: '#sidebar',
     data: {

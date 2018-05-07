@@ -16,5 +16,9 @@ namespace AdminWeb.Controllers
         {
             return View();
         }
+        public IActionResult CommentManagement()
+        {
+            return View();
+        }
     }
 }
