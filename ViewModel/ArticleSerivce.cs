@@ -39,6 +39,28 @@ namespace ViewModel
             var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`LastModifyTime`,`Status`) values(@title,@content,'" + DateTime.Now+ "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "',@status)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status) });
             return result ?Message.Success:Message.Error;
         }
+        public List<Article> GetArticleList(DbContext db,int start,int count)
+        {
+            MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
+            List<Article> list = new List<Article>();
+            var data = db.ExecuteQuery("select * from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
+
+            foreach (DataRow item in data.Tables[0].Rows)
+            {
+                Article tt = new Article();
+                var dt = new DateTime();
+                tt.Id =Convert.ToInt32(item["Id"]);
+                tt.Title = item["Title"].ToString();
+                tt.Content = item["MainContent"].ToString();
+
+                bool flag = DateTime.TryParse(item["CreateTime"].ToString(),out dt);
+                tt.CreateTime = flag ? dt : DateTime.MinValue;
+                flag = DateTime.TryParse(item["LastModifyTime"].ToString(),out dt);
+                tt.LastModifyTime = flag ? dt : DateTime.MinValue;
+                list.Add(tt);
+            }
+            return list;
+        }
     }
     public class TitleService
     {
