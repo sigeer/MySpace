@@ -6,7 +6,7 @@
 <script type="text/javascript" charset="utf-8" src="~/lib/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="~/lib/ueditor/ueditor.all.js"></script>
 <script type="text/javascript" charset="utf-8" src="~/lib/ueditor/lang/zh-cn/zh-cn.js"></script>
-<section class="wrapper">
+<div class="container-fluid" style="margin-top:0px;" id='postBlog'>
     <div class="row">
         <div class="editor-area">
             <div>
@@ -21,7 +21,6 @@
                 </script>
 
             </div>
-
             <div id="btns">
                 <div>
                     <button onclick="getAllHtml()">获得整个html的内容</button>
@@ -171,4 +170,6 @@
             }
         </script>
     </div>
-</section>
+</div>
+<script src='~/js/vueJs/postBlog.Js'>
+</script>

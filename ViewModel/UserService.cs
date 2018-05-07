@@ -39,7 +39,7 @@ namespace ViewModel
                 gm.ContactInfo = email;
                 var paramters = new MySqlParameter[] { new MySqlParameter("ip", ip), new MySqlParameter("email", email), new MySqlParameter("id", SqlDbType.Int) };
                 paramters[2].Direction = ParameterDirection.Output;
-                var result = db.ExecuteNonQuery("insert into `person`(`IP`,`Status`,`ContactInfo`,`FirstVisitedTime`) values(@ip,'1',@email,'" + DateTime.Now + "');select @id= SCOPE_IDENTITY();", paramters);
+                var result = db.ExecuteNonQuery("insert into `person`(`IP`,`Status`,`ContactInfo`,`FirstVisitedTime`) values(@ip,'1',@email,'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "');select @id= LAST_INSERT_ID();", paramters);
                 if (result)
                 {
                     int id = Convert.ToInt32(paramters[2].Value);

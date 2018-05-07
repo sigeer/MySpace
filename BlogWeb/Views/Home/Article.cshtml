@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
 
     <!-- Theme style  -->
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
 
     <!-- Modernizr JS -->
     <!-- jQuery -->
@@ -44,16 +44,60 @@
     <style>
         .panel-heading {
             background-color:white!important;
+            border:0px;
+            border-bottom: 1px;
         }
+        .sigeer-loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url(../images/loader.gif) center no-repeat;
+        }
+.gototop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+}
+.gototop.active {
+  opacity: 1;
+  visibility: visible;
+}
+.gototop a {
+  width: 50px;
+  height: 50px;
+  display: table;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-align: center;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  border-radius: 4px;
+}
+.gototop a i {
+  height: 50px;
+  display: table-cell;
+  vertical-align: middle;
+}
+.gototop a:hover, .gototop a:active, .gototop a:focus {
+  text-decoration: none;
+  outline: none;
+}
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-default  navbar-static-top">
-        <div class="container-fluid">
-            <div class="col-xs-2">
-
-            </div>
+        <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <a class="navbar-brand" href="/Home/Index">首页</a>
@@ -73,21 +117,20 @@
         </div><!-- /.container-fluid -->
     </nav>
     <div id="articleContent">
-        <div class="sigeer-loader" v-show="pageLoad"></div>
-        <div class="container-fluid">
+        <div class="sigeer-loader" v-show="dataLoad"></div>
+        <div class="container">
             <div class="row">
                 <div class="col-xs-12 ">
                     <div class="row">
-                        <div class="col-xs-2">
-                        </div>
-                        <div class="col-xs-8">
-                            <div class="row">
+                        <div class="col-xs-9">
+                            <div class="form-group">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div class="bb">
                                             <h2 style="font-size: 42px;">{{model.title}}</h2>
                                             <small>{{model.createTime}}</small>
                                         </div>
+                                        <hr/>
                                     </div>
                                     <div class="panel-body">
                                         <div class="form-group" v-html="model.content">
@@ -96,31 +139,37 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="form-group">
                                 <div id="comment" class="panel panel-default">
-                                    <div class="panel-heading">{{existComments.length}}条评论</div>
+                                    <div class="panel-heading">{{existComments.length}}条评论<hr/></div>
                                     <div class="panel-body">
-                                        <div>
+                                        <div class="form-group">
                                             <div v-for="x in existComments">
                                                 <small>{{x.guest.ip}}&nbsp;({{x.createTime}})</small>
                                                 <p>{{x.content}}</p>
                                                 <hr />
                                             </div>
                                         </div>
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                                <label>联系方式（邮箱或其他）：</label>
-                                                <input type="text" class="form-control" v-model="commentModel.Email" placeholder="交易" />
+                                        <div class="form-group">
+                                            <div class="form-inline">
+                                                <div class="form-group">
+                                                    <label>联系方式（邮箱或其他）：</label>
+                                                    <input type="text" class="form-control" v-model="commentModel.Email" placeholder="交易" />
+                                                </div>
                                             </div>
-
                                         </div>
-                                        <textarea class="form-control" style="resize:none" v-model="commentModel.Comment"></textarea>
-                                        <button class="btn btn-default" v-on:click="postComment" style="margin-left:90%">评论</button>
+                                        <div class="form-group">
+                                            <textarea class="form-control" style="resize:none" v-model="commentModel.Comment"></textarea>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-primary col-md-2 col-md-offset-10" v-on:click="postComment">评论</button>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-xs-3">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <ul>
@@ -153,13 +202,10 @@
     <div class="gototop js-top">
         <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
     </div>
-    <nav class="navbar navbar-default navbar-static-bottom">
-        <div class="container">
-            <div id="footer">
-
-            </div>
+    <div class="container text-center">
+        <div id="footer">
         </div>
-    </nav>
+    </div>
     <script>
         function getQueryStringByName(name) {
             var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
@@ -169,12 +215,12 @@
             return result[1];
         }
         $('#footer').html("&copy;" + new Date().getFullYear() + " - sigeer Powered By Asp.Net Core");
-        var api = 'http://localhost:8082';
+        var api = 'http://localhost:8085';
         var titleConten = new Vue({
             el: '#articleContent',
             data: {
                 model: {},
-                pageLoad: true,
+                dataLoad: true,
                 existComments: [],
                 commentModel: { Email: '', Comment: '', AId: getQueryStringByName("AId") }
             },
@@ -183,34 +229,34 @@
             },
             methods: {
                 initData: function () {
-                    this.pageLoad = true;
+                    this.dataLoad = true;
                     //$(".sigeer-loader").fadeOut("slow");
                     var _self = this;
                     $.ajax({
                         url: api + '/api/Content/GetArticle?AId=' + getQueryStringByName("AId"),
                         method: 'get',
                         success: function (data, status) {
-                            _self.pageLoad = false;
+                            _self.dataLoad = false;
                             _self.model = data;
                             _self.getComment();
                         },
                         error: function () {
-                            _self.pageLoad = false;
+                            _self.dataLoad = false;
                         }
                     });
                 },
                 getComment: function () {
-                    this.pageLoad = true;
+                    this.dataLoad = true;
                     var _self = this;
                     $.ajax({
                         url: api + '/api/Content/GetComment?AId=' + getQueryStringByName("AId"),
                         method: 'get',
                         success: function (data, status) {
-                            _self.pageLoad = false;
+                            _self.dataLoad = false;
                             _self.existComments = data;
                         },
                         error: function () {
-                            _self.pageLoad = false;
+                            _self.dataLoad = false;
                         }
                     });
                 },
@@ -219,7 +265,7 @@
                         alert('别搞事');
                         return;
                     }
-                    this.pageLoad = true;
+                    this.dataLoad = true;
                     var _self = this;
                     $.ajax({
                         url: api + '/api/Content/SendComment',
@@ -227,11 +273,11 @@
                         contentType: 'application/json;charset=UTF-8',
                         data: JSON.stringify(_self.commentModel),
                         success: function (data, status) {
-                            _self.pageLoad = false;
+                            _self.dataLoad = false;
                             _self.getComment();
                         },
                         error: function () {
-                            _self.pageLoad = false;
+                            _self.dataLoad = false;
                         }
                     });
                 },

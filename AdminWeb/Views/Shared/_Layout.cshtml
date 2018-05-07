@@ -58,102 +58,37 @@
         TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
         <!--header start-->
-        <header class="header black-bg">
-            <div class="sidebar-toggle-box">
-                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
-            </div>
-            <!--logo start-->
-            <a href="/Home/Login" class="logo"><b>后台管理</b></a>
-            <!--logo end-->
-            <div class="nav notify-row" id="top_menu">
-                <!--  notification start -->
-                <ul class="nav top-menu">
-                    <!-- inbox dropdown start-->
-                    <li id="header_inbox_bar" class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">5</span>
-                        </a>
-                        <ul class="dropdown-menu extended inbox">
-                            <div class="notify-arrow notify-arrow-green"></div>
-                            <li>
-                                <p class="green">You have 5 new messages</p>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="/img/ui-zac.jpg"></span>
-                                    <span class="subject">
-                                        <span class="from">Zac Snider</span>
-                                        <span class="time">Just now</span>
-                                    </span>
-                                    <span class="message">
-                                        Hi mate, how is everything?
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="/img/ui-divya.jpg"></span>
-                                    <span class="subject">
-                                        <span class="from">Divya Manian</span>
-                                        <span class="time">40 mins.</span>
-                                    </span>
-                                    <span class="message">
-                                        Hi, I need your help with this.
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="/img/ui-danro.jpg"></span>
-                                    <span class="subject">
-                                        <span class="from">Dan Rogers</span>
-                                        <span class="time">2 hrs.</span>
-                                    </span>
-                                    <span class="message">
-                                        Love your new Dashboard.
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="/img/ui-sherman.jpg"></span>
-                                    <span class="subject">
-                                        <span class="from">Dj Sherman</span>
-                                        <span class="time">4 hrs.</span>
-                                    </span>
-                                    <span class="message">
-                                        Please, answer asap.
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.html#">See all messages</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- inbox dropdown end -->
-                </ul>
-                <!--  notification end -->
-            </div>
-            <div class="top-menu">
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href='javascript:;' onclick="localStorage.removeItem('token'); location.href='/Home/Login'">Logout</a></li>
-                </ul>
-            </div>
-        </header>
+    <nav class="navbar navbar-inverse  navbar-static-top" style="margin-bottom:0px">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/Home/Index">首页</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">工具</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我的其他站点<span class="caret"></span></a>
+                            <ul class="dropdown-menu" style="min-width:100%">
+                                <li><a href="#">待定...</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+    </nav>
         <!--header end-->
         <!-- **********************************************************************************************************************************************************
         MAIN SIDEBAR MENU
         *********************************************************************************************************************************************************** -->
         <!--sidebar start-->
         <aside>
-            <div id="sidebar" class="nav-collapse ">
+            <div id="sidebar" class="nav-collapse">
                 <!-- sidebar menu start-->
                 <ul class="sidebar-menu" id="nav-accordion">
                     <p class="centered"><a href="profile.html"><img src="~/img/head.png" class="img-circle" width="60"></a></p>
                     <h5 class="centered">{{userName}}</h5>
-
                     <li class="mt">
                         <a class="active" href="/Home/Index">
                             <i class="fa fa-dashboard"></i>
@@ -191,7 +126,7 @@
         *********************************************************************************************************************************************************** -->
         <!--main content start-->
         <section id="main-content">
-            @RenderBody();
+            @RenderBody()
 
         </section>
 
@@ -251,67 +186,7 @@
     <script>
         $('#footerTag').html('&copy; ' + new Date().getFullYear() + ' - sigeer Powered By Asp.Net Core');
     </script>
-    <script>
-        var api = 'http://localhost:8082';
-        var beforDiv = new Vue({
-            el: '.userInfo',
-            data: {
-                userName: '',
-                article: {Content:'',Title:''},
-            },
-            mounted() {
-                this.pageLoad();
-            },
-            methods: {
-                pageLoad: function () {
-                    this.getUser();
-                },
-                getUser: function () {
-                    var _self = this;
-                    $.ajax({
-                        url: api + '/api/Identity/GetUser',
-                        headers: { 'Authorization': 'Bearer ' + localStorage.token },
-                        method: 'get',
-                        success: function (data) {
-                            if (window.localStorage) {
-                                _self.userName = data;
-                            } else {
-                                alert('This browser does NOT support localStorage');
-                            }
-                        },
-                        error: function (data) {
-                            if (data.status == 401) {
-                                location.href = '/Home/Login';
-                            }
-                        }
-                    });
-                },
-                submitArticle: function () {
-                    var _self = this;
-                    _self.article.Content = UE.getEditor('editor').getContent();
-                    if (String.isNullOrEmpty(_self.article.Title) || String.isNullOrEmpty(_self.article.Content)) {
-                        alert('null');
-                        return;
-                    }
-                    
-                    $.ajax({
-                        url: api + '/api/Blog/PostArticle',
-                        headers: { 'Authorization': 'Bearer ' + localStorage.token },
-                        data: _self.article,
-                        //contentType: 'application/json;charset=UTF-8',
-                        type  : 'post',
-                        success: function (data) {
-                            //location.reload();
-                        },
-                        error: function (data) {
-                            if (data.status == 401) {
-                                location.href = '/Home/Login';
-                            }
-                        }
-                    });
-                }
-            }
-        });
+    <script src='~/js/vueJs/index.Js'>
     </script>
 </body>
 </html>

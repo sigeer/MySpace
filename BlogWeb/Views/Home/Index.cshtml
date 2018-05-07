@@ -10,17 +10,6 @@
     <title>@ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Facebook and Twitter integration -->
-    <meta property="og:title" content="" />
-    <meta property="og:image" content="" />
-    <meta property="og:url" content="" />
-    <meta property="og:site_name" content="" />
-    <meta property="og:description" content="" />
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:image" content="" />
-    <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
-
     <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,700,800" rel="stylesheet">
 
@@ -44,8 +33,9 @@
 <body>
 
     <div id="page">
+        <!-- background-image: url(../images/image_1.jpg) -->
         <div class="sigeer-loader" v-show="pageLoad"></div>
-        <div class="sigeer-aside" style="background-image: url(../images/image_1.jpg)">
+        <div class="sigeer-aside" style="backgroup-color:black">
             <div class="overlay"></div>
             <nav role="navigation">
                 <ul>
@@ -53,7 +43,6 @@
                 </ul>
             </nav>
             <div class="featured">
-                <span>Sigeer</span>
                 <h2>Sigeer</h2>
             </div>
         </div>
@@ -93,7 +82,7 @@
     <!-- Main -->
     <script src="/js/main.js"></script>
     <script>
-        var api = 'http://localhost:8082';
+        var api = 'http://localhost:8085';
         var token = localStorage.getItem("token");
         var titleContent = new Vue({
             el: '#page',
