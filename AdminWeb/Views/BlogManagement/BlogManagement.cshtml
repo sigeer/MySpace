@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewData["Title"] = "BlogManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid" style="margin-top:20px;" id='blogManagement'>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>list</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label></label>
+                        <div class='col-xs-2'>   
+                            <input type='text' class="form-control"/>
+                        </div> 
+                        <div class="col-xs-2">
+                            <button class="btn btn-primary" v-on:click='getArticleList'>搜索</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                    </div>
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>标题</th>
+                                    <th>大致内容</th>
+                                    <th>标签</th>
+                                    <th>创建时间</th>
+                                    <th>状态</th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                    <tr v-for='x in articleList'>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            {{x.title}}
+                                        </td>
+                                        <td>
+                                            {{x.description}}
+                                        </td>
+                                        <td>
+                                            <span v-for='y in x.tags' class="label label-info">{{y.name}}</span>
+                                        </td>
+                                        <td>
+                                            {{x.createTime}}
+                                        </td>
+                                        <td>
+                                            {{x.status}}
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-default"
+                                            style="padding: 2px 5px;width: 26px;">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="btn btn-default" style="padding: 2px 5px;width: 26px;">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- <div role="">
+                            <div class="col-xs-6">
+                                <div class="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">
+                                    Showing {{First()}} to {{userLeave.length+(index.currentPage-1)*10}} of {{Table.dataCount}} entries
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+                                    <ul class="pagination pull-right">
+                                        <li ng-class="index.prePage" ng-model="index.prePage"><a href="javascript:;" ng-click="getLeaveList(index.currentPage-1,Table.pageSize)"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                                        <li v-for="i in index.all" ng-class="i.class" ng-model="i.class"><a href="javascript:;" ng-click="getLeaveList(i.key,Table.pageSize)">{{i.key}}</a></li>
+                                        <li ng-class="index.nextPage" ng-model="index.nextPage"><a href="javascript:;" ng-click="getLeaveList(index.currentPage+1,Table.pageSize)"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+                                    </ul>
+                                </div>
+                            </div> -->
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/js/vueJs/BlogManagement.Js'>
+</script>
