@@ -1,0 +1,237 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:url" content="" />
+    <meta name="twitter:card" content="" />
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,700,800" rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="/css/icomoon.css">
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Modernizr JS -->
+    <script src="/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="single">
+
+    <div id="page">
+        <div class="sigeer-loader" v-show="pageLoad"></div>
+        <div id="sigeer-aside" style="background-image: url(../images/Article.jpg)" data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <nav role="navigation">
+                <ul>
+                    <li><a href="/Home/Index"><i class="icon-home"></i></a></li>
+                </ul>
+            </nav>
+            <div class="page-title">
+                <img src="~/images/head.png">
+                <span>{{model.createtime}}</span>
+                <h3>{{model.title}}</h3>
+            </div>
+        </div>
+        <div id="sigeer-main-content">
+            <div class="sigeer-post">
+                <div class="sigeer-entry padding">
+                    <div v-html="model.content">
+                    </div>
+                    <hr />
+                    <hr />
+                    <div id="comment" class="panel panel-default">
+                        <div class="panel-heading">评论</div>
+                        <div class="panel-body">
+                            <div>
+                                <div v-for="x in existComments">
+                                    <small>{{x.guest.ip}}&nbsp;({{x.createTime}})</small>
+                                    <p>{{x.content}}</p>
+                                    <hr />
+                                </div>
+                            </div>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label>邮箱地址：</label>
+                                    <input type="text" class="form-control" v-model="commentModel.Email" placeholder="交易" />
+                                </div>
+
+                            </div>
+                            <textarea class="form-control" style="resize:none" v-model="commentModel.Comment"></textarea>
+                            <button class="btn btn-default" v-on:click="postComment" style="margin-left:90%">评论</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="gototop js-top">
+        <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
+    </div>
+    @*<div class="sigeer-navigation">
+            <div class="sigeer-cover prev sigeer-cover-sm">
+                <div class="overlay"></div>
+
+                <a class="copy" href="#">
+                    <div class="display-t">
+                        <div class="display-tc">
+                            <div>
+                                <span>Previous Post</span>
+                                <h2>How to be an affective web developer</h2>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+            <div class="sigeer-cover next sigeer-cover-sm">
+                <div class="overlay"></div>
+                <a class="copy" href="#">
+                    <div class="display-t">
+                        <div class="display-tc">
+                            <div>
+                                <span>Next Post</span>
+                                <h2>How to be an affective web developer</h2>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>*@
+
+    <footer>
+        <div id="footer">
+           
+        </div>
+    </footer>
+
+
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <!-- jQuery Easing -->
+    <script src="/js/jquery.easing.1.3.js"></script>
+    <!-- Bootstrap -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- Waypoints -->
+    <script src="/js/jquery.waypoints.min.js"></script>
+    <!-- Stellar Parallax -->
+    <script src="/js/jquery.stellar.min.js"></script>
+    <!-- Main -->
+    <script src="/js/main.js"></script>
+    <script src="~/js/sigeerUtility.js"></script>
+    <script>
+        function getQueryStringByName(name) {
+            var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+            if (result == null || result.length < 1) {
+                return "";
+            }
+            return result[1];
+        }
+        $('#footer').html("&copy;" + new Date().getFullYear() + " - sigeer Powered By Asp.Net Core");
+        var api = 'http://localhost:8082';
+        var titleConten = new Vue({
+            el: '#page',
+            data: {
+                model: {},
+                pageLoad: true,
+                existComments:[],
+                commentModel: { Email: '', Comment: '', AId: getQueryStringByName("AId")}
+            },
+            mounted() {
+                this.initData();
+            },
+            methods: {
+                initData: function () {
+                    this.pageLoad = true;
+                    //$(".sigeer-loader").fadeOut("slow");
+                    var _self = this;
+                    $.ajax({
+                        url: api + '/api/Content/GetArticle?AId=' + getQueryStringByName("AId"),
+                        method: 'get',
+                        success: function (data, status) {
+                            _self.pageLoad = false;
+                            _self.model = data;
+                            _self.getComment();
+                        },
+                        error: function () {
+                            _self.pageLoad = false;
+                        }
+                    });
+                },
+                getComment: function () {
+                    this.pageLoad = true;
+                    var _self = this;
+                    $.ajax({
+                        url: api + '/api/Content/GetComment?AId=' + getQueryStringByName("AId"),
+                        method: 'get',
+                        success: function (data, status) {
+                            _self.pageLoad = false;
+                            _self.existComments = data;
+                        },
+                        error: function () {
+                            _self.pageLoad = false;
+                        }
+                    });
+                },
+                postComment: function () {
+                    if (!this.commentValid()) {
+                        alert('别搞事');
+                        return;
+                    }
+                    this.pageLoad = true;
+                    var _self = this;
+                    $.ajax({
+                        url: api + '/api/Content/SendComment',
+                        method: 'post',
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify(_self.commentModel),
+                        success: function (data, status) {
+                            _self.pageLoad = false;
+                            _self.getComment();
+                        },
+                        error: function () {
+                            _self.pageLoad = false;
+                        }
+                    });
+                },
+                commentValid: function () {
+                    var result = true;
+                    if (String.isNullOrEmpty(this.commentModel.Comment)) {
+                        result = false;
+                    }
+                    return result;
+                }
+            },
+        });
+    </script>
+</body>
+</html>
+
