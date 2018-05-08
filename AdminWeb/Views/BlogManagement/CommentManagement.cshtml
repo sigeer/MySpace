@@ -4,26 +4,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid" style="margin-top:70px;" id='blogManagement'>
+<div class="container-fluid" style="margin-top:70px;" id='commentManagement'>
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span>list</span>
+                    <span>评论管理</span>
                 </div>
                 <div class="panel-body">
-                    <div class="form-group">
-                        <label></label>
-                        <div class='col-xs-2'>
-                            <input type='text' class="form-control" />
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label></label>
+                            <div class='col-xs-2'>
+                                <input type='text' v-model="filter.Str" class="form-control" />
+                            </div>
+                            <div class="col-xs-2">
+                                <button class="btn btn-primary" v-on:click='getCommentList()'>搜索</button>
+                            </div>
+                            <div>
+                                <span v-show="filter.PosterId!=0" class="label label-info">显示评论者为{{choosedPerson}}的评论<i style="cursor:pointer" v-on:click="filter.PosterId=0;getCommentList()" class="glyphicon glyphicon-remove"></i></span>
+                                <span v-show="filter.ArticleId!=0" class="label label-info">显示{{choosedArticle}}文章下的评论<i style="cursor:pointer" v-on:click="filter.ArticleId=0;getCommentList()" class="glyphicon glyphicon-remove"></i></span>
+                            </div>
                         </div>
-                        <div class="col-xs-2">
-                            <button class="btn btn-primary" v-on:click='getArticleList'>搜索</button>
-                        </div>
-                    </div>
-                    <div class="form-group">
+                        <div class="form-group">
 
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -32,44 +39,59 @@
                                         <th>
                                             #
                                         </th>
-                                        <th>标题</th>
-                                        <th>大致内容</th>
-                                        <th>标签</th>
-                                        <th>创建时间</th>
                                         <th>评论</th>
-                                        <th>状态</th>
+                                        <th>评论者</th>
+                                        <th>文章</th>
+                                        <th>创建时间</th>
+                                        <th style="width:10%;">状态</th>
                                         <th style="width:10%;"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for='x in articleList'>
+                                    <tr v-for='x in commentList'>
                                         <td></td>
                                         <td>
-                                            {{x.title}}
+                                            {{x.content}}
                                         </td>
-                                        <td>
-                                            {{x.nohtml}}
+                                        <td style="cursor:pointer" v-on:click="choosedPerson=x.guest.contactInfo;filter.PosterId=x.guest.id;getCommentList()">
+                                            {{x.guest.contactInfo}}
                                         </td>
-                                        <td>
-                                            <span v-for='y in x.tags' class="label label-info">{{y.name}}</span>
+                                        <td style="cursor:pointer"  v-on:click="choosedArticle=x.article.title;filter.ArticleId=x.article.id;getCommentList()">
+                                            {{x.article.title}}
                                         </td>
                                         <td>
                                             {{x.createTime}}
                                         </td>
                                         <td>
-                                            {{x.comments.length}}
+                                            <span v-show="!x.isEdit">{{x.status}}</span>
+                                            <span v-show="x.isEdit">
+                                                <select v-model="x.status" class="form-control">
+                                                    <option value="4">不可见</option>
+                                                    <option value="3">删除</option>
+                                                    <option value="2">已发布</option>
+                                                </select>
+                                            </span>
+                                            
                                         </td>
                                         <td>
-                                            {{x.status}}
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-default"
-                                               style="padding: 2px 5px;width: 26px;">
-                                                <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
-                                            </a>
-                                            <a class="btn btn-default" style="padding: 2px 5px;width: 26px;">
-                                                <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
-                                            </a>
+                                            <span v-show="!x.isEdit">
+                                                <a class="btn btn-default" v-on:click="x.isEdit=true"
+                                                   style="padding: 2px 5px;width: 26px;">
+                                                    <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+                                                </a>
+                                                <a class="btn btn-default" style="padding: 2px 5px;width: 26px;">
+                                                    <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                                                </a>
+                                            </span>
+                                            <span v-show="x.isEdit">
+                                                <a class="btn btn-default" v-on:click="changeStatus()"
+                                                   style="padding: 2px 5px;width: 26px;color:green">
+                                                    <i class="glyphicon glyphicon-ok " aria-hidden="true"></i>
+                                                </a>
+                                                <a class="btn btn-default" style="padding: 2px 5px;width: 26px;color:red">
+                                                    <i class="glyphicon glyphicon-remove " aria-hidden="true"></i>
+                                                </a>
+                                            </span>
                                         </td>
                                     </tr>
                                 </tbody>

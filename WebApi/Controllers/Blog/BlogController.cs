@@ -20,5 +20,10 @@ namespace WebApi.Controllers
             var start = (index - 1) * count;
             return new ArticleSerivce().GetArticleList(DbContext, start, count);
         }
+        [HttpPost]
+        public List<Comment> GetCommentList(QueryModel queryModel)
+        {
+            return new CommentService().GetCommentList(DbContext, queryModel);
+        }
     }
 }

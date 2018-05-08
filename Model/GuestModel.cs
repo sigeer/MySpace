@@ -11,7 +11,5 @@ namespace Model
         public int? Status { get; set; }
         public DateTime? FirstVisitedTime { get; set; }
         public string ContactInfo { get; set; }
-        public GuestModel()
-        { }
     }
 }

@@ -25,5 +25,7 @@ namespace Model
         public GuestModel Guest { get; set; }
         public string Content { get; set; }
         public DateTime? CreateTime { get; set; }
+        public int Status { get; set; }
+        public Article Article { get; set; }
     }
 }

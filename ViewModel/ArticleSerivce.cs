@@ -95,7 +95,7 @@ namespace ViewModel
             var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now + "')",new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) });
             return result ? Message.Success : Message.Error;
         }
-        public List<Comment> GetComments(DbContext db ,int aId)
+        public List<Comment> GetCommentsInArticle(DbContext db ,int aId)
         {
             if (aId==0)
             {
@@ -114,6 +114,53 @@ namespace ViewModel
                 bool flag = DateTime.TryParse(item["CreateTime"].ToString(), out dt);
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
+            }
+            return list;
+        }
+        public List<Comment> GetCommentList(DbContext db,QueryModel queryModel)
+        {
+            var start = (queryModel.Index - 1) * queryModel.Count;
+
+            List<Comment> list = new List<Comment>();
+            MySqlParameter[] parameters = { new MySqlParameter("aid", queryModel.Filter.ArticleId),
+                    new MySqlParameter("pid", queryModel.Filter.PosterId),
+                    new MySqlParameter("str", "%"+queryModel.Filter.Str+"%"),
+                    new MySqlParameter("order", queryModel.Order)};
+            string whereSql = "";
+            if (queryModel.Filter.ArticleId!=0)
+            {
+                whereSql += "`comment`.ArticleId = @aid";
+            }
+            if (queryModel.Filter.PosterId!=0)
+            {
+                whereSql += whereSql.Length > 0 ? " and `comment`.PosterId = @pid" : " `comment`.PosterId = @pid";
+            }
+            if (!string.IsNullOrEmpty(queryModel.Filter.Str))
+            {
+                whereSql += " `comment`.Content like @str";
+            }
+            if (whereSql.Length>0)
+            {
+                whereSql = " where " + whereSql;
+            }
+            var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql, parameters);
+
+            foreach (DataRow item in data.Tables[0].Rows)
+            {
+                Comment comment = new Comment();
+                var dt = new DateTime();
+                int temp;
+                comment.Guest = new GuestModel() { ContactInfo = item["ContactInfo"].ToString(), Id = int.Parse(item["PosterId"].ToString()), IP = item["IP"].ToString(), FirstVisitedTime = Convert.ToDateTime(item["FirstVisitedTime"]), Status = 1 };
+                var content = item["Content"].ToString();
+                comment.Content = content.Length>13?content.Substring(0,10)+"...":content;
+                
+                comment.Id = Convert.ToInt32(item["Id"]);
+                comment.Article = new Article() { Id = Convert.ToInt32(item["ArticleId"]), Title = item["Title"].ToString() };
+                bool flag = DateTime.TryParse(item["CreateTime"].ToString(), out dt);
+                comment.CreateTime = flag ? dt : DateTime.MinValue;
+                flag = int.TryParse(item["Status"].ToString(),out temp);
+                comment.Status = temp;
+                list.Add(comment);
             }
             return list;
         }

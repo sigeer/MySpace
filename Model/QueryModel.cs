@@ -8,5 +8,13 @@ namespace Model
     {
         public int Index { get; set; }
         public int Count { get; set; }
+        public string Order { get; set; }
+        public FilterModel Filter { get; set; }
+    }
+    public class FilterModel
+    {
+        public int ArticleId { get; set; }
+        public int PosterId { get; set; }
+        public string Str { get; set; }
     }
 }

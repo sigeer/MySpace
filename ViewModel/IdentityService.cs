@@ -27,6 +27,7 @@ namespace ViewModel
             var item = data.Tables[0].Rows[0];
             Identity id = new Identity();
             id.NickName = item["NickName"].ToString();
+            id.HeadPic = item["HeadPic"].ToString();
             return id;
         }
         public static bool QrValid(DbContext db ,string sendCode)

@@ -20,5 +20,9 @@ namespace AdminWeb.Controllers
         {
             return View();
         }
+        public IActionResult RecycleBin()
+        {
+            return View();
+        }
     }
 }

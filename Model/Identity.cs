@@ -7,6 +7,7 @@ namespace Model
 {
     public class Identity
     {
+        public string HeadPic { get; set; }
         public string LoginName { get; set; }
         public string NickName { get; set; }
         public DateTime DateTime { get; set; }

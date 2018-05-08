@@ -3,6 +3,7 @@ var indexDiv = new Vue({
     el: '#sidebar',
     data: {
         userName: '',
+        headPic:'',
         articleList:[],
         article: {Content:'',Title:''},
     },
@@ -21,7 +22,9 @@ var indexDiv = new Vue({
                 method: 'get',
                 success: function (data) {
                     if (window.localStorage) {
-                        _self.userName = data;
+                        _self.userName = data.item1;
+                        _self.headPic = data.item2;
+                        $('#headPic').attr('src', _self.headPic);
                     } else {
                         alert('This browser does NOT support localStorage');
                     }

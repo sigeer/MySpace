@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         }
         public List<Comment> GetComment(int Aid)
         {
-            return new CommentService().GetComments(DbContext, Aid);
+            return new CommentService().GetCommentsInArticle(DbContext, Aid);
         }
         [HttpPost]
         public string SendComment([FromBody]dynamic model)

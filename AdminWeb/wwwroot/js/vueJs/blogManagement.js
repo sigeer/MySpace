@@ -1,4 +1,4 @@
-var api = 'http://localhost:8082';
+
 var blogManagementDiv = new Vue({
     el: '#blogManagement',
     data: {
@@ -19,7 +19,7 @@ var blogManagementDiv = new Vue({
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
-                url: api + '/api/Blog/GetArticleList?index=' + _self.index + '&count=' + _self.count,
+                url: apiUrl + '/api/Blog/GetArticleList?index=' + _self.index + '&count=' + _self.count,
                 method: 'get',
                 success: function (data, status) {
                     _self.articleList = [];
