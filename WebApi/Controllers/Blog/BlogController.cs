@@ -9,19 +9,19 @@ namespace WebApi.Controllers
     public class BlogController : BaseApiController
     {
         [HttpPost]
-        public ResponseModel PostArticle(Article article)
+        public ResponseMessage PostArticle(Article article)
         {
             ArticleSerivce asv = new ArticleSerivce();
             asv.SaveToDb(DbContext, article);
-            return new ResponseModel(Message.Success);
+            return new ResponseMessage(Message.Success);
         }
-        public List<Article> GetArticleList(int index, int count)
+        public  ResponseModel<List<Article>> GetArticleList(int index, int count)
         {
             var start = (index - 1) * count;
             return new ArticleSerivce().GetArticleList(DbContext, start, count);
         }
         [HttpPost]
-        public List<Comment> GetCommentList(QueryModel queryModel)
+        public ResponseModel<List<Comment>> GetCommentList(QueryModel queryModel)
         {
             return new CommentService().GetCommentList(DbContext, queryModel);
         }

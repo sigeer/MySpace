@@ -60,7 +60,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
 
-        public ResponseModel ValidCode(string code)
+        public ResponseMessage ValidCode(string code)
         {
             var result = IdentityService.QrValid(DbContext, code);
             if (result)
@@ -75,11 +75,11 @@ namespace WebApi.Controllers
                     new JwtHeader(new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256)),
                     new JwtPayload(claims));
                 string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-                return new ResponseModel(Message.Success, jwtToken, "");
+                return new ResponseMessage(Message.Success, jwtToken, "");
             }
             else
             {
-                return new ResponseModel(Message.Error);
+                return new ResponseMessage(Message.Error);
             }
         }
 

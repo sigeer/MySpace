@@ -39,9 +39,11 @@ namespace ViewModel
             var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status),new MySqlParameter("status", article.Nohtml) });
             return result ?Message.Success:Message.Error;
         }
-        public List<Article> GetArticleList(DbContext db,int start,int count)
+        public ResponseModel<List<Article>> GetArticleList(DbContext db,int start,int count)
         {
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
+            var dataCount = db.ExecuteQuery("select Count(*) from article");
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
             List<Article> list = new List<Article>();
             var data = db.ExecuteQuery("select * from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
@@ -52,23 +54,26 @@ namespace ViewModel
                 tt.Id =Convert.ToInt32(item["Id"]);
                 tt.Title = item["Title"].ToString();
                 tt.Content = item["MainContent"].ToString();
-                tt.Nohtml = item["Nohtml"].ToString();
+                var nohtml = item["Nohtml"].ToString();
+                tt.Nohtml = nohtml.Length>13?nohtml.Substring(0,10)+"...":nohtml;
                 tt.Comments = new List<Comment>();
                 tt.Histories = new List<ArticleHistory>();
                 bool flag = DateTime.TryParse(item["CreateTime"].ToString(),out dt);
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
-            return list;
+            return new ResponseModel<List<Article>>(list,Count);
         }
     }
     
     public class TitleService
     {
-        public List<Title> GetTitles(DbContext db,int start,int count)
+        public ResponseModel<List<Title>> GetTitles(DbContext db,int start,int count)
         { 
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
             List<Title> list = new List<Title>();
+            var dataCount = db.ExecuteQuery("select Count(*) from article");
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
             var data = db.ExecuteQuery("select id,title,CreateTime from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
@@ -81,7 +86,7 @@ namespace ViewModel
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
-            return list;
+            return new ResponseModel<List<Title>>(list,Count);
         }
     }
     public class CommentService
@@ -95,14 +100,17 @@ namespace ViewModel
             var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now + "')",new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) });
             return result ? Message.Success : Message.Error;
         }
-        public List<Comment> GetCommentsInArticle(DbContext db ,int aId)
+        public ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
         {
             if (aId==0)
             {
-                return new List<Comment>();
+                return new ResponseModel<List<Comment>>();
             }
             List<Comment> list = new List<Comment>();
             MySqlParameter[] parameters = { new MySqlParameter("aid", aId) };
+            var dataCount = db.ExecuteQuery("select Count(*) from comment where `comment`.ArticleId=@aid; ",parameters);
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
+
             var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id where `comment`.ArticleId=@aid;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
@@ -115,9 +123,9 @@ namespace ViewModel
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
-            return list;
+            return new ResponseModel<List<Comment>>(list,Count);
         }
-        public List<Comment> GetCommentList(DbContext db,QueryModel queryModel)
+        public ResponseModel<List<Comment>> GetCommentList(DbContext db,QueryModel queryModel)
         {
             var start = (queryModel.Index - 1) * queryModel.Count;
 
@@ -143,6 +151,8 @@ namespace ViewModel
             {
                 whereSql = " where " + whereSql;
             }
+            var dataCount = db.ExecuteQuery("select Count(*) from comment "+whereSql,parameters);
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
             var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql, parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
@@ -162,7 +172,7 @@ namespace ViewModel
                 comment.Status = temp;
                 list.Add(comment);
             }
-            return list;
+            return new ResponseModel<List<Comment>>(list,Count);
         }
     }
 }

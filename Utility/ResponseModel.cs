@@ -5,12 +5,27 @@ using System.Text;
 
 namespace Utility
 {
-    public class ResponseModel
+    public class ResponseModel<T>
+    {
+        public T Data{get;set;}
+        public int Count{get;set;}
+        public ResponseModel(T list,int count)
+        {
+            Data = list;
+            Count = count;
+        }
+        public ResponseModel()
+        {
+            Data = default(T);
+            Count = 0;
+        }
+    }
+    public class ResponseMessage
     {
         public string Data { get; set; }
         public string Status { get; set; }
         public string Info { get; set; }
-        public ResponseModel()
+        public ResponseMessage()
         {
             Data = "";
             Status = Message.Success;
@@ -20,13 +35,13 @@ namespace Utility
         {
             return JsonConvert.SerializeObject(this);
         }
-        public ResponseModel(string data, string status, string info)
+        public ResponseMessage(string data, string status, string info)
         {
             Data = data??"";
             Status = status;
             Info = info??"";
         }
-        public ResponseModel(string status)
+        public ResponseMessage(string status)
         {
             Status = status;
             Data = "";
