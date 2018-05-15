@@ -73,14 +73,15 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        <div role="">
-                            <div class="col-xs-6">
-                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
-                                    <ul class="pagination pull-right">
-                                        <li v-class="{'disabled':Page.currentIndex-1<1}" \><a href="javascript:;" v-on:click="Page.previous()"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                                        <li v-for="i in Page.index.all" ><a href="javascript:;" v-on:click="Page.show(i.key)">{{i.key}}</a></li>
-                                        <li v-class="{'disabled':Page.currentIndex+1>Page.pageCount}"><a href="javascript:;" v-on:click="Page.next()"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                                    </ul>
+                            <div>
+                                <div class="col-xs-6">
+                                    <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+                                        <ul class="pagination pull-right">
+                                            <li v-class="{'disabled':Page.currentIndex-1<1}" ><a href="javascript:;" v-on:click="Page.previous()"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                                            <li v-for="i in Page.index" class="{{i.class}}"><a href="javascript:;" v-on:click="Page.show(i.key)">{{i.key}}</a></li>
+                                            <li v-class="{'disabled':Page.currentIndex+1>Page.pageCount}"><a href="javascript:;" v-on:click="Page.next()"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -89,6 +90,6 @@
             </div>
         </div>
     </div>
+    <script src='~/js/vueJs/BlogManagement.Js'>
+    </script>
 </div>
-<script src='~/js/vueJs/BlogManagement.Js'>
-</script>

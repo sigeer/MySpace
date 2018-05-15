@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         {
             return new ArticleSerivce().GetArticle(DbContext, Aid);
         }
-        public List<Comment> GetComment(int Aid)
+        public ResponseModel<List<Comment>> GetComment(int Aid)
         {
             return new CommentService().GetCommentsInArticle(DbContext, Aid);
         }

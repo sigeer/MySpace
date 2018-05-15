@@ -246,7 +246,7 @@
                         method: 'get',
                         success: function (data, status) {
                             _self.dataLoad = false;
-                            _self.existComments = data;
+                            _self.existComments = data.data;
                         },
                         error: function () {
                             _self.dataLoad = false;
