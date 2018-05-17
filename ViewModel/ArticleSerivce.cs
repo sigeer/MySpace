@@ -33,7 +33,7 @@ namespace ViewModel
              bool flag = DateTime.TryParse(dr["CreateTime"].ToString(), out dt);
             article.CreateTime = flag?dt:DateTime.MinValue;
             return article;
-        }T
+        }
         public string SaveToDb(DbContext db, Article article)
         {
             var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status),new MySqlParameter("status", article.Nohtml) });
