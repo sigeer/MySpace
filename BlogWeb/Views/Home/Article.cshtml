@@ -207,13 +207,6 @@
         </div>
     </div>
     <script>
-        function getQueryStringByName(name) {
-            var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
-            if (result == null || result.length < 1) {
-                return "";
-            }
-            return result[1];
-        }
         $('#footer').html("&copy;" + new Date().getFullYear() + " - sigeer Powered By Asp.Net Core");
         var api = 'http://localhost:8082';
         var titleConten = new Vue({
@@ -253,7 +246,7 @@
                         method: 'get',
                         success: function (data, status) {
                             _self.dataLoad = false;
-                            _self.existComments = data;
+                            _self.existComments = data.data;
                         },
                         error: function () {
                             _self.dataLoad = false;

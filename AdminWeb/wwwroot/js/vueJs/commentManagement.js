@@ -27,9 +27,9 @@
                 data: postModel,
                 success: function (data, status) {
                     _self.commentList = [];
-                    for (var i = 0; i < data.length; i++) {
+                    for (var i = 0; i < data.data.length; i++) {
                         data[i].isEdit = false;
-                        _self.commentList.push(data[i]);
+                        _self.commentList.push(data.data[i]);
                     }
                 }
             });

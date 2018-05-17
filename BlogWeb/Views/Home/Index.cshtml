@@ -25,6 +25,7 @@
 
     <!-- Modernizr JS -->
     <script src="/js/modernizr-2.6.2.min.js"></script>
+    <script src="~/js/sigeerUtility.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
     <script src="js/respond.min.js"></script>
@@ -35,7 +36,7 @@
     <div id="page">
         <!-- background-image: url(../images/image_1.jpg) -->
         <div class="sigeer-loader" v-show="pageLoad"></div>
-        <div class="sigeer-aside" style="backgroup-color:black">
+        <div class="sigeer-aside" style="background-color:black">
             <div class="overlay"></div>
             <nav role="navigation">
                 <ul>
@@ -119,8 +120,8 @@
                         method: 'get',
                         success: function (data, status) {
                             _self.pageLoad = false;
-                            for (var i = 0; i < data.length; i++) {
-                                _self.titleList.push(data[i]);
+                            for (var i = 0; i < data.data.length; i++) {
+                                _self.titleList.push(data.data[i]);
                             }
                         }
                     });

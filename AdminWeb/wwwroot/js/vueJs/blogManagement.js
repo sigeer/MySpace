@@ -6,7 +6,7 @@ var blogManagementDiv = new Vue({
         Page : {
             currentIndex: 1,//当前所在页
             allPage: 5,//可选页数
-            size: pageSize,//每页显示数据数
+            size: 10,//每页显示数据数
             dataCount: null,//总数据数
             pageCount: 0,//总页数
             index: [],
@@ -99,10 +99,10 @@ var blogManagementDiv = new Vue({
                 method: 'get',
                 success: function (data, status) {
                     _self.articleList = [];
-                    for (var i = 0; i < data.length; i++) {
-                        _self.articleList.push(data.Data[i]);
+                    for (var i = 0; i < data.data.length; i++) {
+                        _self.articleList.push(data.data[i]);
                     }
-                    _selft.Page.onInit(data.Count);
+                    _self.Page.onInit(data.count);
                 }
             });
         },

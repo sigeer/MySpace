@@ -43,7 +43,7 @@ namespace ViewModel
         {
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
             var dataCount = db.ExecuteQuery("select Count(*) from article");
-            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
             List<Article> list = new List<Article>();
             var data = db.ExecuteQuery("select * from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
@@ -73,7 +73,7 @@ namespace ViewModel
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
             List<Title> list = new List<Title>();
             var dataCount = db.ExecuteQuery("select Count(*) from article");
-            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
             var data = db.ExecuteQuery("select id,title,CreateTime from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
@@ -109,7 +109,7 @@ namespace ViewModel
             List<Comment> list = new List<Comment>();
             MySqlParameter[] parameters = { new MySqlParameter("aid", aId) };
             var dataCount = db.ExecuteQuery("select Count(*) from comment where `comment`.ArticleId=@aid; ",parameters);
-            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
 
             var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id where `comment`.ArticleId=@aid;", parameters);
 
@@ -152,7 +152,7 @@ namespace ViewModel
                 whereSql = " where " + whereSql;
             }
             var dataCount = db.ExecuteQuery("select Count(*) from comment "+whereSql,parameters);
-            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0]);
+            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
             var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql, parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
