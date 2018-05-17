@@ -4,6 +4,17 @@ using System.Text;
 
 namespace Model
 {   
+    public class ArticleSimple:BaseModel
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public string Nohtml { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public List<ArticleHistory> Histories { get; set; }
+        public int Comments { get; set; }
+        public int Status { get; set; }
+        public int Viewed {get;set;}
+    }
     public class Article:BaseModel
     {
         public string Title { get; set; }
@@ -13,6 +24,7 @@ namespace Model
         public List<ArticleHistory> Histories { get; set; }
         public List<Comment> Comments { get; set; }
         public int Status { get; set; }
+        public int Viewed {get;set;}
     }
     public class ArticleHistory : BaseModel
     {

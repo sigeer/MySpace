@@ -1,4 +1,4 @@
-﻿var apiUrl = 'http://localhost:8082';
+﻿var apiUrl = 'http://localhost:8085';
 String.prototype.isNullOrEmpty = function () {
     return this == null || this == "";
 }
