@@ -13,10 +13,10 @@ namespace WebApi.Controllers
 {
     public class ContentController : BaseApiController
     {
-        public ResponseModel<List<Title>> GetTitles(int index, int count)
+        public ResponseModel<List<ArticleSimple>> GetTitles(int index, int count)
         {
             var start = (index - 1) * count;
-            return new TitleService().GetTitles(DbContext, start, count);
+            return new ArticleSerivce().GetArticleList(DbContext, start, count);
         }
         public Article GetArticle(int Aid)
         {
