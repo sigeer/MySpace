@@ -26,6 +26,8 @@ namespace WebApi.Controllers
                     new Claim(JwtRegisteredClaimNames.Exp, $"{new DateTimeOffset(DateTime.Now.AddHours(2)).ToUnixTimeSeconds()}"),
                     new Claim(JwtRegisteredClaimNames.Nbf, $"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}"),
                     new Claim("HeadPic",result.HeadPic),
+                    new Claim(ClaimTypes.Role,"BBB"),
+                    new Claim(ClaimTypes.Role,"AAA")
                 };
                 //var token = new JwtSecurityToken("test","test",claims, DateTime.Now, DateTime.Now.AddDays(1), new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256));
                 var token = new JwtSecurityToken(
@@ -83,7 +85,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "AAA")]
         public Tuple<string,string> GetUser()
         {
             return new Tuple<string, string>( HttpContext.User.Identity.Name,HttpContext.User.Claims.ToList()[3].Value);
