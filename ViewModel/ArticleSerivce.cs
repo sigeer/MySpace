@@ -15,7 +15,7 @@ namespace ViewModel
         public Article GetArticle(DbContext db,int id)
         {
             MySqlParameter parameter = new MySqlParameter("id", id);
-            var data = db.ExecuteQuery("select * from article where Id=@id", parameter);
+            var data = db.ExecuteQuery("select * from article where Id=@id;update article set Viewed=Viewed + 1 where Id=@id", parameter);
             var temp = data.Tables[0];
             DataRow dr;
             if (temp.Rows.Count>0)
@@ -36,59 +36,37 @@ namespace ViewModel
         }
         public string SaveToDb(DbContext db, Article article)
         {
-            var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status),new MySqlParameter("status", article.Nohtml) });
+            var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`,`Viewed`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml,0)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status),new MySqlParameter("status", article.Nohtml) });
             return result ?Message.Success:Message.Error;
         }
-        public ResponseModel<List<Article>> GetArticleList(DbContext db,int start,int count)
+        public ResponseModel<List<ArticleSimple>> GetArticleList(DbContext db,int start,int count)
         {
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
             var dataCount = db.ExecuteQuery("select Count(*) from article");
             var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
-            List<Article> list = new List<Article>();
-            var data = db.ExecuteQuery("select * from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
+            List<ArticleSimple> list = new List<ArticleSimple>();
+            var data = db.ExecuteQuery("SELECT  article.*,COUNT(comment.articleid) AS commentcount  FROM article LEFT JOIN COMMENT ON article.`Id` = comment.`ArticleId` GROUP BY article.id  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
             {
-                Article tt = new Article();
+                ArticleSimple tt = new ArticleSimple();
                 var dt = new DateTime();
                 tt.Id =Convert.ToInt32(item["Id"]);
                 tt.Title = item["Title"].ToString();
                 tt.Content = item["MainContent"].ToString();
                 var nohtml = item["Nohtml"].ToString();
                 tt.Nohtml = nohtml.Length>13?nohtml.Substring(0,10)+"...":nohtml;
-                tt.Comments = new List<Comment>();
+                tt.Comments = Convert.ToInt32(item["commentcount"]);
                 tt.Histories = new List<ArticleHistory>();
+                tt.Viewed = Convert.ToInt32(item["Viewed"]);
                 bool flag = DateTime.TryParse(item["CreateTime"].ToString(),out dt);
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
-            return new ResponseModel<List<Article>>(list,Count);
+            return new ResponseModel<List<ArticleSimple>>(list,Count);
         }
     }
     
-    public class TitleService
-    {
-        public ResponseModel<List<Title>> GetTitles(DbContext db,int start,int count)
-        { 
-            MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
-            List<Title> list = new List<Title>();
-            var dataCount = db.ExecuteQuery("select Count(*) from article");
-            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
-            var data = db.ExecuteQuery("select id,title,CreateTime from article  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
-
-            foreach (DataRow item in data.Tables[0].Rows)
-            {
-                Title tt = new Title();
-                var dt = new DateTime();
-                tt.Id =Convert.ToInt32(item["Id"]);
-                tt.Name = item["Title"].ToString();
-                bool flag = DateTime.TryParse(item["CreateTime"].ToString(),out dt);
-                tt.CreateTime = flag ? dt : DateTime.MinValue;
-                list.Add(tt);
-            }
-            return new ResponseModel<List<Title>>(list,Count);
-        }
-    }
     public class CommentService
     {
         public string PostComment(DbContext db, string content,GuestModel guest,int aId)

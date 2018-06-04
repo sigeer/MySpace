@@ -15,7 +15,7 @@ namespace WebApi.Controllers
             asv.SaveToDb(DbContext, article);
             return new ResponseMessage(Message.Success);
         }
-        public  ResponseModel<List<Article>> GetArticleList(int index, int count)
+        public  ResponseModel<List<ArticleSimple>> GetArticleList(int index, int count)
         {
             var start = (index - 1) * count;
             return new ArticleSerivce().GetArticleList(DbContext, start, count);
