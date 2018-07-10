@@ -45,7 +45,7 @@ namespace ViewModel
             var dataCount = db.ExecuteQuery("select Count(*) from article");
             var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
             List<ArticleSimple> list = new List<ArticleSimple>();
-            var data = db.ExecuteQuery("SELECT  article.*,COUNT(comment.articleid) AS commentcount  FROM article LEFT JOIN COMMENT ON article.`Id` = comment.`ArticleId` GROUP BY article.id  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
+            var data = db.ExecuteQuery("SELECT  article.*,COUNT(comment.articleid) AS commentcount  FROM article LEFT JOIN comment ON article.`Id` = comment.`ArticleId` GROUP BY article.id  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
             {

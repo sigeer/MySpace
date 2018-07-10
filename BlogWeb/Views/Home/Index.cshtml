@@ -11,10 +11,17 @@
                     <div class="col-xs-9">
                         <div class="list-group">
                             <a href="javascript:;" v-for="x in titleList" class="list-group-item">
-                                <h2 class="list-group-item-heading" v-on:click="getArticle(x.id)">{{x.name}}</h4>
-                                <p class="list-group-item-text">...</p>
+                                <h2 class="list-group-item-heading" v-on:click="getArticle(x.id)">{{x.title}}</h2>
+                                <p class="list-group-item-text">
+                                    {{x.nohtml}}...
+                                </p>
                                 <p><span class="label label-primary">Primary</span></p>
-                                <p class="list-group-item-text">{{x.createTime}}<span style='text:align:right'>x comments</span></p>
+                                <p class="list-group-item-text">
+                                    {{x.createTime}}
+                                    <span style='text-align:right'>
+                                        浏览数:{{x.viewed}}
+                                    </span>
+                                </p>
                             </a>
                         </div>
                     </div>
