@@ -56,7 +56,7 @@ namespace ViewModel
                 tt.Content = item["MainContent"].ToString();
                 var nohtml = item["Nohtml"].ToString();
                 tt.Nohtml = nohtml.Length>13?nohtml.Substring(0,10)+"...":nohtml;
-                tt.Comments = Convert.ToInt32(item["commentcount"]);
+                tt.CommentCount = Convert.ToInt32(item["commentcount"]);
                 tt.Histories = new List<ArticleHistory>();
                 tt.Viewed = Convert.ToInt32(item["Viewed"]);
                 bool flag = DateTime.TryParse(item["CreateTime"].ToString(),out dt);

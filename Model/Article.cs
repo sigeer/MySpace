@@ -11,7 +11,7 @@ namespace Model
         public string Nohtml { get; set; }
         public DateTime? CreateTime { get; set; }
         public List<ArticleHistory> Histories { get; set; }
-        public int Comments { get; set; }
+        public int CommentCount { get; set; }
         public int Status { get; set; }
         public int Viewed {get;set;}
     }

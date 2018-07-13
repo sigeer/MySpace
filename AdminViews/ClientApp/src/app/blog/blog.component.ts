@@ -10,23 +10,33 @@ export class BlogComponent implements OnInit {
   public blogs: BlogList[];
   //public http: HttpClient;
   constructor(private http: HttpClient) {
-    http.get<BlogList[]>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=1&count=10').subscribe(result => {
-      this.blogs = result;
+    http.get<returnResult>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=1&count=10').subscribe(result => {
+      this.blogs = result.data;
     }, error => console.error(error));
   }
   getArticle() {
-    this.http.get<BlogList[]>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=1&count=10').subscribe(result => {
-      this.blogs = result;
+    this.http.get<returnResult>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=1&count=10').subscribe(result => {
+      this.blogs = result.data;
     }, error => console.error(error));
   }
   ngOnInit() {
   }
 
 }
+interface returnResult{
+  data : BlogList[];
+  count:number;
+}
 interface BlogList {
-  Title: string;
-  Content: string;
-  Nohtml: string;
-  CreateTime: Date;
-  Status: number;
+  title: string;
+  content: string;
+  commentCount:number;
+  nohtml: string;
+  createTime: Date;
+  status: number;
+  tags:Tag;
+}
+interface Tag{
+  Name:string;
+  Id:number;
 }
