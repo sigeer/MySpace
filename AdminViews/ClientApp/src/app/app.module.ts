@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BlogComponent } from './blog/blog.component';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BlogComponent } from './blog/blog.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    BlogComponent
+    BlogComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -29,6 +31,7 @@ import { BlogComponent } from './blog/blog.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'blogmanagement', component: BlogComponent },
+      { path: 'commentmanagement', component: BlogComponent },
     ])
   ],
   providers: [],

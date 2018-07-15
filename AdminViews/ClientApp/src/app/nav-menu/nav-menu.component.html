@@ -29,7 +29,12 @@
             </li>
             <li [routerLinkActive]='["link-active"]'>
               <a [routerLink]='["/blogmanagement"]' (click)='collapse()'>
-                <span class='glyphicon glyphicon-th-list'></span> Blog
+                <span class='glyphicon glyphicon-th-list'></span> Blogs
+              </a>
+            </li>
+            <li [routerLinkActive]='["link-active"]'>
+              <a [routerLink]='["/commentmanagement"]' (click)='collapse()'>
+                <span class='glyphicon glyphicon-th-list'></span> Comments
               </a>
             </li>
           </ul>

@@ -14,8 +14,8 @@ export class BlogComponent implements OnInit {
       this.blogs = result.data;
     }, error => console.error(error));
   }
-  getArticle() {
-    this.http.get<returnResult>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=1&count=10').subscribe(result => {
+  getArticle(index: number, count: number) {
+    this.http.get<returnResult>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=' + index + '&count=' + count ).subscribe(result => {
       this.blogs = result.data;
     }, error => console.error(error));
   }
