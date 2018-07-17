@@ -21,7 +21,7 @@ namespace WebApi.Controllers
             return new ArticleSerivce().GetArticleList(DbContext, start, count);
         }
         [HttpPost]
-        public ResponseModel<List<Comment>> GetCommentList(QueryModel queryModel)
+        public ResponseModel<List<Comment>> GetCommentList([FromBody]QueryModel queryModel)
         {
             return new CommentService().GetCommentList(DbContext, queryModel);
         }
