@@ -54,13 +54,12 @@
                                               {{x.status}}
                                           </td>
                                           <td>
-                                              <a class="btn btn-default"
-                                              style="padding: 2px 5px;width: 26px;">
+                                              <button class="btn btn-default">
                                                   编辑
-                                              </a>
-                                              <a class="btn btn-default" style="padding: 2px 5px;width: 26px;">
+                                              </button>
+                                              <button class="btn btn-default" (click)="deleteArticle(x)">
                                                   删除
-                                              </a>
+                                              </button>
                                           </td>
                                       </tr>
                                   </tbody>

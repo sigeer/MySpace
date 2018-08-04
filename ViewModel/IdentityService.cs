@@ -15,6 +15,10 @@ namespace ViewModel
         {
             return db.IsExisted("SELECT * FROM `admin` WHERE PASSWORD=@pwd LIMIT 1;",new MySql.Data.MySqlClient.MySqlParameter("pwd",pwd));
         }
+        public static Identity GetUser(DbContext db, LoginModel model)
+        {
+            return GetUser(db, model.Password);
+        }
         public static Identity GetUser(DbContext db, string pwd)
         {
 

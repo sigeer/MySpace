@@ -13,7 +13,7 @@ namespace WebApi.Controllers
     {
         private DbContext context;
         protected DbContext DbContext => context= HttpContext.RequestServices.GetService(typeof(DbContext)) as DbContext;
-        protected RedisHelper Redis = new RedisHelper("47.94.167.66");
+        //protected RedisHelper Redis = new RedisHelper("47.94.167.66");
         protected SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("a secret that needs to be at least 16 characters long"));
     }
     [EnableCors("any")]

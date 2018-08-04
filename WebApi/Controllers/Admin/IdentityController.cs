@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Model;
 using Utility;
 using Utility.QrCodeHelper;
 using ViewModel;
@@ -15,9 +16,9 @@ namespace WebApi.Controllers
     {
         
         [HttpPost]
-        public IActionResult GetToken(string pwd)
+        public IActionResult GetToken([FromBody]LoginModel loginInfo)
         {
-            var result = IdentityService.GetUser(DbContext, pwd);
+            var result = IdentityService.GetUser(DbContext, loginInfo);
             if (result!=null)
             {
                 var claims = new Claim[]

@@ -13,14 +13,14 @@ namespace WebApi.Controllers
 {
     public class ContentController : BaseApiController
     {
-        public void RedisAdd(string key,string value)
-        {
-            Redis.SetValue(key,value);
-        }
-        public string RedisGet(string key)
-        {
-            return Redis.GetValue(key);
-        }
+        //public void RedisAdd(string key,string value)
+        //{
+        //    Redis.SetValue(key,value);
+        //}
+        //public string RedisGet(string key)
+        //{
+        //    return Redis.GetValue(key);
+        //}
         public ResponseModel<List<ArticleSimple>> GetTitles(int index, int count)
         {
             var start = (index - 1) * count;

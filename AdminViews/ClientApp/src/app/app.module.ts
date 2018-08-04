@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BlogComponent } from './blog/blog.component';
 import { CommentComponent } from './comment/comment.component';
 import { Comment } from '@angular/compiler';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { Comment } from '@angular/compiler';
     CounterComponent,
     FetchDataComponent,
     BlogComponent,
-    CommentComponent
+    CommentComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,6 +35,7 @@ import { Comment } from '@angular/compiler';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'blogmanagement', component: BlogComponent },
       { path: 'commentmanagement', component: CommentComponent },
+      { path: 'login', component: LoginComponent },
     ])
   ],
   providers: [],
