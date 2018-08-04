@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { BlogService } from './blog.service';
 
 @Component({
   selector: 'app-blog',
@@ -8,27 +9,21 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class BlogComponent implements OnInit {
   public blogs: BlogModel[];
-  public pageRequest: PageRequest;
+  private pageRequest: PageRequest = {
+    index: 1,
+    count: 10
+  };
   //public http: HttpClient;
-  constructor(private http: HttpClient) {
-    this.pageRequest = new PageRequest(1, 10);
-    http.get<returnResult>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=' + this.pageRequest.index + '&count=' + this.pageRequest.count).subscribe(result => {
-      this.blogs = result.data;
-    }, error => console.error(error));
+  constructor(private http: HttpClient
+    , private blogservice: BlogService) {
+    this.blogservice.pageRequest = this.pageRequest;
+    this.blogservice.getArticle();
   }
   getArticle() {
-    this.http.get<returnResult>('http://localhost:8092/' + 'api/Blog/GetArticleList?index=' + this.pageRequest.index + '&count=' + this.pageRequest.count).subscribe(result => {
-      this.blogs = result.data;
-    }, error => console.error(error));
+    this.blogservice.getArticle();
   }
   deleteArticle(model: BlogModel) {
-    var confirmResult = confirm("删除 是否继续？");
-    if (confirmResult) {
-      this.http.post<returnResult>('http://localhost:8092/' + 'api/Blog/deletearticle', { id: 1 }).subscribe(result => {
-        this.getArticle();
-      }, error => console.error(error));
-    }
-
+    this.blogservice.deleteArticle(model);
   }
   ngOnInit() {
   }
@@ -59,3 +54,4 @@ interface Tag {
   Name: string;
   Id: number;
 }
+

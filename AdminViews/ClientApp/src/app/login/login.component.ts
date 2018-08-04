@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.http.post('http://localhost:8092/' + 'api/Identity/GetToken', this.form).subscribe(result => {
       alert(result);
-    }, error => alert(JSON.stringify(error)););
+    }, error => alert(JSON.stringify(error)));
   }
   ngOnInit() {
   }
