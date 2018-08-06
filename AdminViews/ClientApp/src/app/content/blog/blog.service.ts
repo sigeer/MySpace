@@ -22,7 +22,7 @@ export class BlogService {
 
   }
 }
-class PageRequest {
+export class PageRequest {
   index: number;
   count: number;
   constructor(i: number, c: number) {
@@ -30,11 +30,11 @@ class PageRequest {
     this.count = c;
   }
 }
-interface returnResult {
+export interface returnResult {
   data: BlogModel[];
   count: number;
 }
-interface BlogModel {
+export interface BlogModel {
   title: string;
   content: string;
   commentCount: number;

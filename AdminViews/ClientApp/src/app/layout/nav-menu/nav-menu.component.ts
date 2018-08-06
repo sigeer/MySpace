@@ -8,12 +8,13 @@ import { HttpClient } from '@angular/common/http'
 })
 export class NavMenuComponent {
   private user: userModel;
+  private apiUrl : string = 'http://localhost:8092/' ;
   isExpanded = false;
   constructor(private http: HttpClient) {
-    this.http.get<userModel>('http://localhost:8092/' + 'api/Identity/GetUser').subscribe(result => {
+    this.http.get<userModel>(this.apiUrl+ 'api/Identity/GetUser').subscribe(result => {
       this.user = result;
     }, error => {
-      if (error.status == 401 && location.href !='http://localhost:8095/login') {
+      if (error.status == 401 && '/login' !=new URL(location.href).pathname) {
         location.href = '/login';
       }
     });
