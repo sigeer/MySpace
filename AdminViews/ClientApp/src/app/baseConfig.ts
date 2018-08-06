@@ -1,0 +1,1 @@
+export const apiUrl:string = 'http://sigeer.top:8092/';

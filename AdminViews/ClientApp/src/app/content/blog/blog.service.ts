@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import {apiUrl} from '../../baseConfig';
+
 @Injectable()
 export class BlogService {
-  public blogs: BlogModel[];
-  private baseUrl: string = 'http://localhost:8092/';
   public pageRequest: PageRequest;
   constructor(private http: HttpClient) { }
   getArticle() {
-    this.http.get<returnResult>(this.baseUrl + 'api/Blog/GetArticleList?index=' + this.pageRequest.index + '&count=' + this.pageRequest.count).subscribe(result => {
-      this.blogs = result.data;
-    }, error => console.error(error));
+     var result = this.http.get<returnResult>(apiUrl + 'api/Blog/GetArticleList?index=' + this.pageRequest.index + '&count=' + this.pageRequest.count)
+     .toPromise<returnResult>()
+     .then(response => {
+      return response;
+    });
+    return result ;
   }
   deleteArticle(model: BlogModel) {
     var confirmResult = confirm("删除 是否继续？");
     if (confirmResult) {
-      this.http.post<returnResult>(this.baseUrl + 'api/Blog/deletearticle', { id: 1 }).subscribe(result => {
+      this.http.post<returnResult>(apiUrl + 'api/Blog/deletearticle', { id: 1 }).subscribe(result => {
         this.getArticle();
       }, error => console.error(error));
     }

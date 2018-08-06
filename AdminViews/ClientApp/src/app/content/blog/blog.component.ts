@@ -5,7 +5,8 @@ import { BlogService,PageRequest,BlogModel } from './blog.service';
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.css']
+  styleUrls: ['./blog.component.css'],
+  providers: [BlogService],
 })
 export class BlogComponent implements OnInit {
   public blogs: BlogModel[];
@@ -13,14 +14,14 @@ export class BlogComponent implements OnInit {
     index: 1,
     count: 10
   };
-  //public http: HttpClient;
+
   constructor(private http: HttpClient
     , private blogservice: BlogService) {
     this.blogservice.pageRequest = this.pageRequest;
-    this.blogservice.getArticle();
+    this.getArticle();
   }
   getArticle() {
-    this.blogservice.getArticle();
+    this.blogservice.getArticle().then(response=>this.blogs=response.data);
   }
   deleteArticle(model: BlogModel) {
     this.blogservice.deleteArticle(model);
