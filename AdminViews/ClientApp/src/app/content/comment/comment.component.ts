@@ -13,6 +13,7 @@ export class CommentComponent implements OnInit {
   private allDataCount:number;
   private comments: any[];
   public queryModel: QueryModel;
+  private filterBackup: string[];
   private pageRequest: PageRequest = {
     index: 1,
     count: 10
@@ -22,7 +23,8 @@ export class CommentComponent implements OnInit {
   };
   private orderBy:string = '';
   //public http: HttpClient;
-  constructor(private http: HttpClient,private commentService:CommentService) { 
+  constructor(private http: HttpClient, private commentService: CommentService) {
+    this.filterBackup = [];
     this.getComments();
   }
   getComments() {
@@ -30,12 +32,14 @@ export class CommentComponent implements OnInit {
     this.commentService.queryModel = this.queryModel;
     this.commentService.getComment().then(response=>{this.comments = response.data,this.allDataCount = response.count});
   }
-  filterFromArticle(id:number){
-    this.filter.ArticleId = id;
+  filterFromArticle(model:any){
+    this.filter.ArticleId = model.id;
+    this.filterBackup.push(model.title);
     this.getComments();
   }
-  filterFromPoster(id:number){
-    this.filter.PosterId = id;
+  filterFromPoster(model:any){
+    this.filter.PosterId = model.id;
+    this.filterBackup.push(model.contactInfo);
     this.getComments();
   }
   ngOnInit() {

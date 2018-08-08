@@ -1,4 +1,4 @@
-export const apiUrl:string = 'http://sigeer.top:8092/';
+export const apiUrl:string = 'http://localhost:8092/';
 export class PageRequest {
     index: number;
     count: number;
