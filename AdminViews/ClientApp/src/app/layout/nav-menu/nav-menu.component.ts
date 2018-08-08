@@ -1,22 +1,26 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,  HttpHeaders } from '@angular/common/http';
+import { CookieService } from "ngx-cookie-service";
 
 import {apiUrl} from '../../baseConfig';
+import { UserinfoService, IUserModel } from './userinfo.service';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+  styleUrls: ['./nav-menu.component.css'],
+  providers:[UserinfoService]
 })
 export class NavMenuComponent {
-  private user: userModel;
+  private user: IUserModel;
   isExpanded = false;
-  constructor(private http: HttpClient) {
-    this.http.get<userModel>(apiUrl+ 'api/Identity/GetUser').subscribe(result => {
-      this.user = result;
-    }, error => {
-      // if (error.status == 401 && '/login' !=new URL(location.href).pathname) {
-      //   location.href = '/login';
-      // }
+  constructor(private http: HttpClient,private userInfoService:UserinfoService) {
+    this.user = {
+      nickname:'unknown',headpic:''
+    }
+    this.userInfoService.getUserBase().then(response=>{
+      this.user = response
+    }).catch(error=>{
+      console.log(error);
     });
   }
   collapse() {
@@ -26,7 +30,4 @@ export class NavMenuComponent {
     this.isExpanded = !this.isExpanded;
   }
 }
-interface userModel {
-  nickname: string;
-  headpic: string;
-}
+

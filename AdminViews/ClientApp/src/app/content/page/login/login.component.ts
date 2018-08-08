@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { CookieService } from "ngx-cookie-service";
 import {apiUrl} from '../../../baseConfig';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
 
@@ -14,12 +14,16 @@ export class LoginComponent implements OnInit {
     userid: 'admin',
     password: '111111'
   };
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private cookieService:CookieService) { }
   login() {
-    console.log(apiUrl);
-    this.http.post(apiUrl + 'api/Identity/GetToken', this.form).subscribe(result => {
+    this.http.post(apiUrl + 'api/Identity/GetToken', this.form).toPromise().then(result => {
       alert(result);
-    }, error => alert(JSON.stringify(error)));
+    }).catch(error=>{
+      var token = error.error.text;
+      this.cookieService.set("token",token);
+      console.log(JSON.stringify(error))
+      window.location.href = '/';
+    });
   }
   ngOnInit() {
   }

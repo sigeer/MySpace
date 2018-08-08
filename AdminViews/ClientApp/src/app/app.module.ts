@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Comment } from '@angular/compiler';
+import { CookieService } from "ngx-cookie-service";
 
 import { AppComponent } from './app.component';
 
@@ -42,7 +43,7 @@ import { ContentModule } from './content/content.module';
     //   { path: 'blogmanagement', component: BlogComponent },
     //   { path: 'commentmanagement', component: CommentComponent }]
     // )],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

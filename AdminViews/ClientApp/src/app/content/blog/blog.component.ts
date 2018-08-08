@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BlogService,PageRequest,BlogModel } from './blog.service';
+import { BlogService,BlogModel } from './blog.service';
+import {PageRequest} from '../../baseConfig';
 
 @Component({
   selector: 'app-blog',

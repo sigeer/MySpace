@@ -1,60 +1,43 @@
-import { Component, OnInit, Query } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { query } from '@angular/core/src/animation/dsl';
+import {CommentService,QueryModel,FilterModel} from './comment.service';
+import {PageRequest} from '../../baseConfig';
 
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.css']
+  styleUrls: ['./comment.component.css'],
+  providers :[CommentService],
 })
 export class CommentComponent implements OnInit {
-
-  public comments: Comment[];
+  private allDataCount:number;
+  private comments: any[];
   public queryModel: QueryModel;
+  private pageRequest: PageRequest = {
+    index: 1,
+    count: 10
+  };
+  private filter:FilterModel ={
+    ArticleId:0,PosterId:0,Str:''
+  };
+  private orderBy:string = '';
   //public http: HttpClient;
-  constructor(private http: HttpClient) {
-    let model = this.queryModel;
-    model = {
-      Index: 1, Count: 10, Filter: { ArticleId: 0, PosterId: 0, Str: '' }, Order: ''
-    };
-    http.post<returnResult>('http://localhost:8092/' + 'api/Blog/GetCommentList', {
-      Index: 1, Count: 10, Filter: { ArticleId: 0, PosterId: 0, Str: '' }, Order: ''
-    }).subscribe(result => {
-      this.comments = result.data;
-    }, error => console.error(error));
+  constructor(private http: HttpClient,private commentService:CommentService) { 
+    this.getComments();
   }
-  getComments(index: number, count: number) {
-    let model = this.queryModel;
-    model = {
-      Index: 1, Count: 10, Filter: { ArticleId: 0, PosterId: 0, Str:'' }, Order: ''
-    };
-    //model.index = index;
-    //model.count = count;
-    this.http.post<returnResult>('http://localhost:8092/' + 'api/Blog/GetCommentList', {
-      Index: 1, Count: 10, Filter: { ArticleId: 0, PosterId: 0, Str: '' }, Order: ''
-    } ).subscribe(result => {
-      this.comments = result.data;
-    }, error => console.error(error));
+  getComments() {
+    this.queryModel = {Index : this.pageRequest.index,Count : this.pageRequest.count,Filter:this.filter,Order:this.orderBy};
+    this.commentService.queryModel = this.queryModel;
+    this.commentService.getComment().then(response=>{this.comments = response.data,this.allDataCount = response.count});
+  }
+  filterFromArticle(id:number){
+    this.filter.ArticleId = id;
+    this.getComments();
+  }
+  filterFromPoster(id:number){
+    this.filter.PosterId = id;
+    this.getComments();
   }
   ngOnInit() {
   }
 }
-interface QueryModel {
-  Index: number,
-  Count: number,
-  Order: string,
-  Filter: FilterModel,
-}
-interface FilterModel {
-  ArticleId: number,
-  PosterId:number,
-  Str:string
-}
-interface returnResult {
-  data: Comment[];
-  count: number;
-}
-interface Comment {
-
-}
-

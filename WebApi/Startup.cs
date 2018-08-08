@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebApi.Controllers;
 using UEditorNetCore;
+using Newtonsoft.Json;
 
 namespace WebApi
 {
@@ -26,7 +27,10 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddUEditorService();
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(option=>
+            {
+                option.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy("any", builder =>
@@ -82,6 +86,7 @@ namespace WebApi
                     name: "default",
                     template: "api/{controller}/{action}/{id?}");
             });
+            
             
 
 

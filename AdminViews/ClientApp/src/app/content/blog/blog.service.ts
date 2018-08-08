@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import {apiUrl} from '../../baseConfig';
+import {apiUrl,PageRequest} from '../../baseConfig';
 
 @Injectable()
 export class BlogService {
@@ -25,14 +25,7 @@ export class BlogService {
 
   }
 }
-export class PageRequest {
-  index: number;
-  count: number;
-  constructor(i: number, c: number) {
-    this.index = i;
-    this.count = c;
-  }
-}
+
 export interface returnResult {
   data: BlogModel[];
   count: number;
@@ -47,6 +40,6 @@ export interface BlogModel {
   tags: Tag;
 }
 interface Tag {
-  Name: string;
-  Id: number;
+  name: string;
+  id: number;
 }
