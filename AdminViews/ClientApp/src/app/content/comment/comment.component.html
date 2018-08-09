@@ -19,7 +19,7 @@
               <div>
                 <label>搜索条件</label>
                 <div>
-                  <span class="label label-success" *ngFor="let x of filterBackup">{{x}}<i style="cursor:pointer;">X</i></span>
+                  <span class="label label-success" *ngFor="let x of filterBackup">{{x.str}} <i style="cursor:pointer;" (click)="removeFilter(x)">X</i></span>
                 </div>
               </div>
             </div>
