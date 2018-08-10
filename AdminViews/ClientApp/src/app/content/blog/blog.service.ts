@@ -15,13 +15,12 @@ export class BlogService {
     });
     return result ;
   }
-  deleteArticle(model: BlogModel) {
-    var confirmResult = confirm("删除 是否继续？");
-    if (confirmResult) {
-      this.http.post<returnResult>(apiUrl + 'api/Blog/deletearticle', { id: 1 }).subscribe(result => {
-        this.getArticle();
-      }, error => console.error(error));
-    }
+  deleteArticle(id:number) {
+    var currentUrl = new URL(location.href).pathname;
+    return this.http.post<returnResult>(apiUrl + 'api/Blog/deletearticle?fromUrl='+currentUrl, { id: id }).toPromise().then(result => {
+      return result;
+    });
+
 
   }
 }
@@ -31,6 +30,7 @@ export interface returnResult {
   count: number;
 }
 export interface BlogModel {
+  id:number,
   title: string;
   content: string;
   commentCount: number;

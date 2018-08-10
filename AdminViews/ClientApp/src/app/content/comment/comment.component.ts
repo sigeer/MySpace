@@ -30,10 +30,13 @@ export class CommentComponent implements OnInit {
   private userInfoService:UserinfoService) {
     this.filterBackup = [];
     this.getComments();
-    var userJSON = localStorage.getItem("userinfo");
-    this.user = JSON.parse(userJSON);
+    this.getUserBase();
   }
   deleteComment(id:number){
+    var confirmResult = confirm("删除 是否继续？");
+    if (!confirmResult){
+      return;
+    }
     this.commentService.deleteComment(id).then(response=>{
       if(response){
         alert('success');
@@ -85,12 +88,10 @@ export class CommentComponent implements OnInit {
   getUserBase(){
     this.userInfoService.getUserBase().then(response=>{
       this.user = response;
-      localStorage.setItem("userinfo",JSON.stringify(this.user));
     }).catch(error=>{
       console.log(error);
     });
   }
   ngOnInit() {
-    this.getUserBase();
   }
 }
