@@ -15,6 +15,15 @@ export class CommentService {
    });
    return result ;
  }
+ deleteComment(id:number){
+   var currentUrl = new URL(location.href).pathname;
+  var result = this.http.post<boolean>(apiUrl + 'api/Blog/DeleteComment?from'+currentUrl,{})
+  .toPromise()
+  .then(response => {
+   return response;
+ });
+ return result ;
+ }
 }
 export interface QueryModel {
   Index: number,

@@ -17,8 +17,13 @@ export class NavMenuComponent {
     this.user = {
       nickname:'unknown',headpic:''
     }
+    localStorage.setItem("userinfo",JSON.stringify(this.user));
+    this.getUserBase();
+  }
+  getUserBase(){
     this.userInfoService.getUserBase().then(response=>{
-      this.user = response
+      this.user = response;
+      localStorage.setItem("userinfo",JSON.stringify(this.user));
     }).catch(error=>{
       console.log(error);
     });
