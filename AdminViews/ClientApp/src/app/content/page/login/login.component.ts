@@ -16,13 +16,13 @@ export class LoginComponent implements OnInit {
   };
   constructor(private http: HttpClient,private cookieService:CookieService) { }
   login() {
-    this.http.post(apiUrl + 'api/Identity/GetToken', this.form).toPromise().then(result => {
-      alert(result);
-    }).catch(error=>{
-      var token = error.error.text;
-      this.cookieService.set("token",token);
-      console.log(JSON.stringify(error))
+    this.http.post<any>(apiUrl + 'api/Identity/GetToken', this.form).toPromise().then(result => {
+      var token = result.token;
+      this.cookieService.set("token", token);
+      //console.log(JSON.stringify(error))
       window.location.href = '/';
+    }).catch(error=>{
+
     });
   }
   ngOnInit() {

@@ -35,11 +35,12 @@ namespace WebApi.Controllers
                     new JwtHeader(new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256)),
                     new JwtPayload(claims));
                 string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-                return new ObjectResult(jwtToken);
+                //return jwtToken;
+                return Ok(new { token = jwtToken });
             }
             else
             {
-                return Content(Message.Error);
+                return Ok(new { token = Message.Error });
             }
 
         }

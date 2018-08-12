@@ -152,5 +152,27 @@ namespace ViewModel
             }
             return new ResponseModel<List<Comment>>(list,Count);
         }
+
+        public static bool Delete(DbContext dbContext,int id)
+        {
+            var sqlStr = "UPDATE COMMENT a SET STATUS =  ( CASE WHEN a.`Status`<=-5 THEN a.`Status` ELSE a.`Status`-1 END )  WHERE a.id = " + id;
+            var exeResult = dbContext.ExecuteNonQuery(sqlStr);
+            return exeResult;
+        }
+
+        public static List<KeyValue> GetBaseSettings(DbContext dbContext)
+        {
+            var sqlStr = "select * from systemdetail where baseid = 2";
+            var queryResult = dbContext.ExecuteQuery(sqlStr);
+            List<KeyValue> list = new List<KeyValue>();
+            foreach (DataRow item in queryResult.Tables[0].Rows)
+            {
+                KeyValue kv = new KeyValue();
+                kv.Key = Convert.ToInt32(item["DetailId"]);
+                kv.Value = item["DetailName"].ToString();
+                list.Add(kv);
+            }
+            return list;
+        }
     }
 }

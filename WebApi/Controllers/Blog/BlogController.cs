@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Utility;
 using ViewModel;
@@ -24,6 +25,17 @@ namespace WebApi.Controllers
         public ResponseModel<List<Comment>> GetCommentList([FromBody]QueryModel queryModel)
         {
             return new CommentService().GetCommentList(DbContext, queryModel);
+        }
+        [HttpPost]
+        public bool DeleteComment([FromBody]JObject jObject)
+        {
+            return CommentService.Delete(DbContext,jObject["id"].Value<int>());
+        }
+        [HttpGet]
+        public ResponseModel<List<KeyValue>> GetCommentSettings()
+        {
+            var data =  CommentService.GetBaseSettings(DbContext);
+            return new ResponseModel<List<KeyValue>>(data,data.Count);
         }
     }
 }

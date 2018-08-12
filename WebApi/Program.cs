@@ -19,8 +19,8 @@ namespace WebApi
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseKestrel()
-               .UseUrls("http://sigeer.top:8092")
+            //.UseKestrel()
+            //   .UseUrls("http://sigeer.top:8092")
                 .UseStartup<Startup>()
                 .Build();
     }
