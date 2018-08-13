@@ -37,8 +37,8 @@ export class CommentComponent implements OnInit {
   }
   getBaseSetting() {
     this.commentService.getBaseSettings().then(response => {
-      this.allStatus.splice(0);
-      this.allStatus.push({Key:0,Value:'All'});
+      this.allStatus = [];
+      this.allStatus.push({key:0,value:'全部'});
       response.data.forEach(v=>{
         this.allStatus.push(v);
       });
@@ -50,9 +50,6 @@ export class CommentComponent implements OnInit {
       v.isEdit = false;
     });
     model.isEdit = true;
-  }
-  saveChange() {
-
   }
   deleteComment(id: number) {
     var confirmResult = confirm("删除 是否继续？");
@@ -75,7 +72,11 @@ export class CommentComponent implements OnInit {
       this.comments = [];
       for (var i = 0; i < response.data.length; i++) {
         response.data[i].index = i + 1;
-        response.data[i].create
+        this.allStatus.forEach(v => {
+          if (v.key == response.data[i].status) {
+            response.data[i].statusdisplay = v.value;
+          }
+        })
         this.comments.push(response.data[i]);
       }
       //this.comments = response.data;
@@ -106,6 +107,12 @@ export class CommentComponent implements OnInit {
     }).catch(error => {
       console.log(error);
     });
+  }
+  saveChange(model:any) {
+    this.commentService.saveChange(model).then(response => {
+      if (response) {
+        model.isEdit = false;
+      } });
   }
   ngOnInit() {
   }

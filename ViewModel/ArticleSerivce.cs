@@ -179,5 +179,11 @@ namespace ViewModel
             }
             return list;
         }
+
+        public static bool Modify(DbContext dbContext, int id ,int status)
+        {
+            var sqlStr = "update comment set status = " + status + " where id = " + id;
+            return dbContext.ExecuteNonQuery(sqlStr);
+        }
     }
 }

@@ -33,9 +33,9 @@ export class CommentService {
     return result;
   }
   saveChange(model: any) {
-    let postModel = { '': model.status };
+    let postModel = { status: model.status,id:model.id };
     var currentUrl = new URL(location.href).pathname;
-    var result = this.http.post<boolean>(apiUrl + 'api/Blog/ModifyComment?from=' + currentUrl, JSON.stringify(postModel))
+    var result = this.http.post<boolean>(apiUrl + 'api/Blog/ModifyComment?from=' + currentUrl, postModel)
       .toPromise()
       .then(response => {
         return response;

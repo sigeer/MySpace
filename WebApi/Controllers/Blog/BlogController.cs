@@ -31,6 +31,11 @@ namespace WebApi.Controllers
         {
             return CommentService.Delete(DbContext,jObject["id"].Value<int>());
         }
+        [HttpPost]
+        public bool ModifyComment([FromBody]JObject jObject)
+        {
+            return CommentService.Modify(DbContext, jObject["id"].Value<int>(), jObject["status"].Value<int>());
+        }
         [HttpGet]
         public ResponseModel<List<KeyValue>> GetCommentSettings()
         {
