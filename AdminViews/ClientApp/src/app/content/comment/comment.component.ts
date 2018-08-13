@@ -112,6 +112,11 @@ export class CommentComponent implements OnInit {
     this.commentService.saveChange(model).then(response => {
       if (response) {
         model.isEdit = false;
+        this.allStatus.forEach(v => {
+          if (v.key == model.status) {
+            model.statusdisplay = v.value;
+          }
+        });
       } });
   }
   ngOnInit() {
