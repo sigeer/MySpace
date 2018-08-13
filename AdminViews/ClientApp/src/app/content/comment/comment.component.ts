@@ -24,7 +24,7 @@ export class CommentComponent implements OnInit {
     count: 10
   };
   private filter: FilterModel = {
-    ArticleId: 0, PosterId: 0, Str: ''
+    ArticleId: 0, PosterId: 0, Str: '',Status :0,
   };
   private orderBy: string = '';
   //public http: HttpClient;
@@ -37,8 +37,12 @@ export class CommentComponent implements OnInit {
   }
   getBaseSetting() {
     this.commentService.getBaseSettings().then(response => {
-      this.allStatus = response.data;
-    })
+      this.allStatus.splice(0);
+      this.allStatus.push({Key:0,Value:'All'});
+      response.data.forEach(v=>{
+        this.allStatus.push(v);
+      });
+    });
   }
   editComment(model: any) {
 

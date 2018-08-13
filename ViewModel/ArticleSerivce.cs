@@ -111,11 +111,16 @@ namespace ViewModel
             MySqlParameter[] parameters = { new MySqlParameter("aid", queryModel.Filter.ArticleId),
                     new MySqlParameter("pid", queryModel.Filter.PosterId),
                     new MySqlParameter("str", "%"+queryModel.Filter.Str+"%"),
-                    new MySqlParameter("order", queryModel.Order)};
+                    new MySqlParameter("order", queryModel.Order),
+                    new MySqlParameter("status", queryModel.Filter.Status)};
             string whereSql = "";
             if (queryModel.Filter.ArticleId!=0)
             {
                 whereSql += "`comment`.ArticleId = @aid";
+            }
+            if (queryModel.Filter.Status!=0)
+            {
+                whereSql += "`comment`.status = @status";
             }
             if (queryModel.Filter.PosterId!=0)
             {

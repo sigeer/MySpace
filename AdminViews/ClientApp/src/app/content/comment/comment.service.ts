@@ -52,7 +52,8 @@ export interface QueryModel {
 export interface FilterModel {
   ArticleId: number,
   PosterId: number,
-  Str: string
+  Str: string,
+  Status:number
 }
 export interface returnResult {
   data: any[];

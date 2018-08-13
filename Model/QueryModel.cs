@@ -16,5 +16,6 @@ namespace Model
         public int ArticleId { get; set; }
         public int PosterId { get; set; }
         public string Str { get; set; }
+        public int Status{get;set;}
     }
 }
