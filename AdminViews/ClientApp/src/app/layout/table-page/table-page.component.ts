@@ -10,8 +10,8 @@ export class TablePageComponent implements OnInit {
   public totalDataCount:number = 0;
   public currentIndex:number = 0;
   public pageSize:number = 0;
-  public pageShown:IPageForShow[];
-  public getData;
+  public pageShown: IPageForShow[];
+  public getData: any;
   constructor() { }
 
   ngOnInit() {

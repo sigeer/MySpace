@@ -4,12 +4,13 @@ import { CommentService, QueryModel, FilterModel } from './comment.service';
 import { PageRequest } from '../../baseConfig';
 import { forEach } from '@angular/router/src/utils/collection';
 import { UserinfoService, IUserModel } from '../../layout/nav-menu/userinfo.service';
+import { TablePageComponent } from '../../layout/table-page/table-page.component';
 
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.css'],
-  providers: [CommentService, UserinfoService],
+  providers: [CommentService, UserinfoService, TablePageComponent],
 })
 export class CommentComponent implements OnInit {
   private output: string = '';
@@ -29,11 +30,12 @@ export class CommentComponent implements OnInit {
   private orderBy: string = '';
   //public http: HttpClient;
   constructor(private http: HttpClient, private commentService: CommentService,
-    private userInfoService: UserinfoService) {
+    private userInfoService: UserinfoService, private pageComponent: TablePageComponent) {
     this.filterBackup = [];
     this.getBaseSetting();
     this.getComments();
     this.getUserBase();
+    this.pageComponent.getData = this.getComments;
   }
   getBaseSetting() {
     this.commentService.getBaseSettings().then(response => {
