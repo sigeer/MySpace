@@ -32,33 +32,43 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor='let x of blogs'>
-                                        <td>
-                                        </td>
-                                        <td>
-                                            {{x.title}}
-                                        </td>
-                                        <td>
-                                            {{x.nohtml}}
-                                        </td>
-                                        <td>
-                                            <span *ngFor='let y of x.Tags' class="label label-info">{{y.Name}}</span>
-                                        </td>
-                                        <td>
-                                            {{x.createTime}}
-                                        </td>
-                                        <td>
-                                            {{x.status}}
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-default">
-                                                编辑
-                                            </button>
-                                            <button class="btn btn-default" (click)="deleteArticle(x)">
-                                                删除
-                                            </button>
-                                        </td>
-                                    </tr>
+                                  <tr *ngFor='let x of blogs'>
+                                    <td></td>
+                                    <td>
+                                      {{x.title}}
+                                    </td>
+                                    <td>
+                                      {{x.nohtml}}
+                                    </td>
+                                    <td>
+                                      <span *ngFor='let y of x.Tags' class="label label-info">{{y.Name}}</span>
+                                    </td>
+                                    <td>
+                                      {{x.createTime}}
+                                    </td>
+                                    <td>
+                                      {{x.status}}
+                                    </td>
+                                    <td>
+                                      <span *ngIf="x.isEdit">
+                                        <button class="btn btn-default" (click)="saveChange(x)">
+                                          保存修改
+                                        </button>
+                                        <button class="btn btn-default" (click)="x.isEdit = false;">
+                                          放弃修改
+                                        </button>
+                                      </span>
+                                      <span *ngIf="!x.isEdit">
+                                        <button class="btn btn-default" (click)="editArticle(x)">
+                                          编辑
+                                        </button>
+                                        <button class="btn btn-default" (click)="deleteArticle(x.id)">
+                                          删除
+                                        </button>
+                                      </span>
+
+                                    </td>
+                                  </tr>
                                 </tbody>
                             </table>
                         </div>

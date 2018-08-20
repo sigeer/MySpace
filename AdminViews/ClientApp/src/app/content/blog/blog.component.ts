@@ -12,6 +12,7 @@ import { UserinfoService, IUserModel } from '../../layout/nav-menu/userinfo.serv
 })
 export class BlogComponent implements OnInit {
   public blogs: BlogModel[];
+  private output: string;
   private user:IUserModel;
   private pageRequest: PageRequest = {
     index: 1,
@@ -28,24 +29,31 @@ export class BlogComponent implements OnInit {
   getArticle() {
     this.blogservice.getArticle().then(response=>this.blogs=response.data);
   }
-  deleteArticle(id:number) {
-    var confirmResult = confirm("删除 是否继续？");
-    if (confirmResult) {
-      this.blogservice.deleteArticle(id).then(response=>{
-        if (response){
-          var index = this.blogs.findIndex(v=>v.id==id);
-          this.blogs.splice(index,1);
-          //this.allDataCount --;
-        }
-      });
-    }
-    
-  }
   getUserBase(){
     this.userInfoService.getUserBase().then(response=>{
       this.user = response;
     }).catch(error=>{
       console.log(error);
+    });
+  }
+  editArticle(model: BlogModel) {
+    this.blogs.forEach(v => {
+      v.isEdit = false;
+    });
+    model.isEdit = true;
+  }
+  deleteArticle(id: number) {
+    var confirmResult = confirm("删除 是否继续？");
+    if (!confirmResult) {
+      return;
+    }
+    this.blogservice.deleteArticle(id).then(response => {
+      if (response) {
+        this.output = ('删除成功');
+        var index = this.blogs.findIndex(v => v.id == id);
+        this.blogs.splice(index, 1);
+        //this.allDataCount--;
+      }
     });
   }
   ngOnInit() {

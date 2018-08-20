@@ -1,31 +1,18 @@
-<div>
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-            <div aria-live="polite">
-                <!--显示第 {{First()}} 条到 {{getCurrentDataCount()}} 条数据，共 {{totalDataCount}} 条数据-->  
-                <!--<a class="esf-cursor " ng-click="setSize(20,$event.target);" [ngClass]="{'high-light':size==20}">20</a>  |  
-                <a class="esf-cursor" [ngClass]="{'high-light':size==50}" ng-click="setSize(50,$event.target);">50</a>  |  
-                <a class="esf-cursor" [ngClass]="{'high-light':size==100}" ng-click="setSize(100,$event.target);">100</a>   |  
-                <a class="esf-cursor" [ngClass]="{'high-light':size==-1}" ng-click="setSize(-1,$event.target);">全部</a>-->
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <div>
-            <ul class="pagination pull-right">
-                <li [ngClass]="{'disabled':currentIndex-1<1}">
-                    <a href="javascript:;" (click)="jump(1)" title="上"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                </li>
-                <li [ngClass]="{'disabled':currentIndex-1<1}">
-                    <a href="javascript:;" (click)="previous()" title="上一页"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                </li>
-                <li>
-                    <input type="number" class="form-control input-sm" style="width:50px" (keyup.enter)="jump(currentIndex)" [(ngModel)]="currentIndex" />
-                </li>
-                <li [ngClass]="{'disabled':currentIndex+1>pageCount}">
-                    <a href="javascript:;" (click)="next()"><span class="glyphicon glyphicon-chevron-right" title="下一页"></span></a>
-                </li>
-                <li [ngClass]="{'disabled':currentIndex-1<1}">
-                    <a href="javascript:;" (click)="jump(totalPageCount)" title="上"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                </li>
-            </ul>
-       </div>
+<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+    <div aria-live="polite">
+        <!--显示第 {{First()}} 条到 {{getCurrentDataCount()}} 条数据，共 {{totalDataCount}} 条数据-->  
+        <!--<a class="esf-cursor " ng-click="setSize(20,$event.target);" [ngClass]="{'high-light':size==20}">20</a>  |  
+        <a class="esf-cursor" [ngClass]="{'high-light':size==50}" ng-click="setSize(50,$event.target);">50</a>  |  
+        <a class="esf-cursor" [ngClass]="{'high-light':size==100}" ng-click="setSize(100,$event.target);">100</a>   |  
+        <a class="esf-cursor" [ngClass]="{'high-light':size==-1}" ng-click="setSize(-1,$event.target);">全部</a>-->
     </div>
+</div>
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+  <div class="form-inline">
+    <a href="javascript:;" class="btn btn-default" (click)="jump(1)" title="上"><span class="glyphicon glyphicon-chevron-left"></span></a>
+    <a href="javascript:;" class="btn btn-default" (click)="previous()" title="上一页"><span class="glyphicon glyphicon-chevron-left"></span></a>
+    <input type="number" class="form-control" style="width:50px" (keyup.enter)="jump(currentIndex)" [(ngModel)]="currentIndex" />
+    <a href="javascript:;" class="btn btn-default" (click)="next()"><span class="glyphicon glyphicon-chevron-right" title="下一页"></span></a>
+    <a href="javascript:;" class="btn btn-default" (click)="jump(totalPageCount)" title="上"><span class="glyphicon glyphicon-chevron-right"></span></a>
+  </div>
+</div>

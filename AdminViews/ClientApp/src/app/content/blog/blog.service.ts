@@ -38,6 +38,7 @@ export interface BlogModel {
   createTime: Date;
   status: number;
   tags: Tag;
+  isEdit: boolean;
 }
 interface Tag {
   name: string;
