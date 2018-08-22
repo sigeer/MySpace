@@ -27,7 +27,13 @@ export class BlogComponent implements OnInit {
     this.getUserBase();
   }
   getArticle() {
-    this.blogservice.getArticle().then(response=>this.blogs=response.data);
+    this.blogservice.getArticle().then(response=>{
+      this.blogs=[];
+      response.data.forEach(m => {
+        this.blogs.push(m);
+      });
+      this.output = '查询成功';
+    });
   }
   getUserBase(){
     this.userInfoService.getUserBase().then(response=>{

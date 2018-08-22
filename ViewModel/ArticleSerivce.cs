@@ -75,7 +75,8 @@ namespace ViewModel
             {
                 return Message.Error;
             }
-            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now + "')",new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) });
+            var parameters = new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) };
+            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`,`Status`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now + "',2 )",parameters);
             return result ? Message.Success : Message.Error;
         }
         public ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
@@ -112,7 +113,9 @@ namespace ViewModel
                     new MySqlParameter("pid", queryModel.Filter.PosterId),
                     new MySqlParameter("str", "%"+queryModel.Filter.Str+"%"),
                     new MySqlParameter("order", queryModel.Order),
-                    new MySqlParameter("status", queryModel.Filter.Status)};
+                    new MySqlParameter("status", queryModel.Filter.Status),
+                    new MySqlParameter("start", start),
+                    new MySqlParameter("count", queryModel.Count)};
             string whereSql = "";
             if (queryModel.Filter.ArticleId!=0)
             {
@@ -136,7 +139,7 @@ namespace ViewModel
             }
             var dataCount = db.ExecuteQuery("select Count(*) from comment "+whereSql,parameters);
             var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
-            var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql, parameters);
+            var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql +" ORDER BY `comment`.`CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
             {

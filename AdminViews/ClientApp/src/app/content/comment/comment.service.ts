@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class CommentService {
   public queryModel: QueryModel;
   constructor(private http: HttpClient) { }
+  
   getComment() {
     var result = this.http.post<returnResult>(apiUrl + 'api/Blog/GetCommentList', this.queryModel)
       .toPromise()

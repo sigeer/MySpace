@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommentService, QueryModel, FilterModel } from './comment.service';
-import { PageRequest } from '../../baseConfig';
+import { PageRequest,Untility } from '../../baseConfig';
 import { forEach } from '@angular/router/src/utils/collection';
 import { UserinfoService, IUserModel } from '../../layout/nav-menu/userinfo.service';
 import { TablePageComponent } from '../../layout/table-page/table-page.component';
@@ -35,7 +35,7 @@ export class CommentComponent implements OnInit {
     this.getBaseSetting();
     this.getComments();
     this.getUserBase();
-    this.pageComponent.getData = this.getComments;
+    
   }
   getBaseSetting() {
     this.commentService.getBaseSettings().then(response => {
@@ -74,10 +74,12 @@ export class CommentComponent implements OnInit {
       this.comments = [];
       for (var i = 0; i < response.data.length; i++) {
         response.data[i].index = i + 1;
+        response.data[i].timedisplay = Untility.dateTimeDisplay(response.data[i].createTime);
         this.allStatus.forEach(v => {
           if (v.key == response.data[i].status) {
             response.data[i].statusdisplay = v.value;
           }
+          
         })
         this.comments.push(response.data[i]);
       }
@@ -122,5 +124,6 @@ export class CommentComponent implements OnInit {
       } });
   }
   ngOnInit() {
+    this.pageComponent.getData = this.getComments;
   }
 }

@@ -6,12 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table-page.component.css']
 })
 export class TablePageComponent implements OnInit {
+  //总页数  --计算获得
   public totalPageCount :number = 0;
+  //总数据数  --后台返回
   public totalDataCount:number = 0;
-  public currentIndex:number = 0;
+  //输入
+  public currentIndex:number = 1;
+  //输入
   public pageSize:number = 0;
+  //
   public pageShown: IPageForShow[];
-  public getData: any;
+  public getData: Function;
   constructor() { }
 
   ngOnInit() {
@@ -21,6 +26,7 @@ export class TablePageComponent implements OnInit {
     this.pageSize = size;
   }
   jump(target:number){
+    this.currentIndex = target;
     let pageResult =  this.getData();
     this.totalDataCount =  pageResult.Count;
   }

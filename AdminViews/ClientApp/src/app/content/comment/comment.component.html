@@ -36,12 +36,12 @@
                   <th>
                     #
                   </th>
-                  <th>评论</th>
+                  <th>评论内容</th>
                   <th>来源</th>
                   <th>评论者</th>
-                  <th>评论时间</th>
-                  <th>状态</th>
-                  <th></th>
+                  <th style="width:18%">评论时间</th>
+                  <th style="width:10%;">状态</th>
+                  <th style="width:8%;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -52,18 +52,18 @@
                   <td>
                     {{x.content}}
                   </td>
-                  <td>
-                    <span (click)='filterFromArticle(x.article)' title="筛选出所有来自文章[{{x.article.title}}]的评论" class="label label-default" style="cursor: pointer;">{{x.article.title}}</span>
+                  <td style="cursor: pointer;" (click)='filterFromArticle(x.article)' title="筛选出所有来自文章[{{x.article.title}}]的评论"  >
+                    <a>{{x.article.title}}</a>
                   </td>
-                  <td>
-                    <span (click)='filterFromPoster(x.guest)' title="筛选出所有来自访客[{{x.guest.contactInfo}}]的评论" class="label label-info" style="cursor: pointer;">{{x.guest.contactInfo}}</span>
+                  <td (click)='filterFromPoster(x.guest)' title="筛选出所有来自访客[{{x.guest.contactInfo}}]的评论" style="cursor: pointer;">
+                    <a>{{x.guest.contactInfo}}</a>
 
                   </td>
                   <td>
-                    {{x.createTime}}
+                    {{x.timedisplay}}
                   </td>
                   <td>
-                    <span *ngIf="!x.isEdit">{{x.statusdisplay}}</span>
+                    <span *ngIf="!x.isEdit"  (click)="editComment(x)"><a>{{x.statusdisplay}}</a></span>
                     <span *ngIf="x.isEdit">
                       <select class="form-control" [(ngModel)]="x.status" style="height:auto;max-width:inherit">
                         <option *ngFor="let x of allStatus" value="{{x.key}}">{{x.value}}</option>
@@ -72,19 +72,19 @@
                   </td>
                   <td>
                     <span *ngIf="x.isEdit">
-                      <button class="btn btn-default" (click)="saveChange(x)">
-                        保存修改
+                      <button class="btn btn-default" (click)="saveChange(x)" style="padding: 2px 5px;width: 26px;">
+                        <span class="glyphicon glyphicon-ok"></span>
                       </button>
-                      <button class="btn btn-default" (click)="x.isEdit = false;">
-                        放弃修改
+                      <button class="btn btn-default" (click)="x.isEdit = false;" style="padding: 2px 5px;width: 26px;">
+                        <span class="glyphicon glyphicon-remove"></span>
                       </button>
                     </span>
                     <span *ngIf="!x.isEdit">
-                      <button class="btn btn-default" (click)="editComment(x)">
-                        编辑
-                      </button>
-                      <button class="btn btn-default" (click)="deleteComment(x.id)">
-                        删除
+                      <!-- <button class="btn btn-default" (click)="editComment(x)" style="padding: 2px 5px;width: 26px;">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                      </button> -->
+                      <button class="btn btn-default" (click)="deleteComment(x.id)" style="padding: 2px 5px;width: 26px;">
+                        <span class="glyphicon glyphicon-trash"></span>
                       </button>
                     </span>
 

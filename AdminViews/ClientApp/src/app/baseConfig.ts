@@ -7,3 +7,13 @@ export class PageRequest {
       this.count = c;
     }
   }
+export class Untility{
+  static dateTimeDisplay(oldStr:any) {
+    if(typeof(oldStr)=='string'){
+      return oldStr.replace('T',' ');
+    }
+    else if(typeof(oldStr)=='object'){
+      return '';
+    }
+  }
+}

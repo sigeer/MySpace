@@ -1,0 +1,12 @@
+a{
+    text-decoration:underline !important;  
+    color:#66ccff !important;
+    font-weight: 666;
+    cursor: pointer;
+  }
+  th {
+    text-align: center;
+  }
+  td{
+    text-align: center;
+  }
