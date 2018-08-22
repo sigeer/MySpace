@@ -20,6 +20,7 @@ export class CommentComponent implements OnInit {
   public queryModel: QueryModel;
   private filterBackup: any[];
   private allStatus: any[];
+  private backup:any;
   private pageRequest: PageRequest = {
     index: 1,
     count: 10
@@ -47,7 +48,7 @@ export class CommentComponent implements OnInit {
     });
   }
   editComment(model: any) {
-
+    this.backup =Untility.deepClone(model);
     this.comments.forEach(v => {
       v.isEdit = false;
     });
@@ -86,6 +87,7 @@ export class CommentComponent implements OnInit {
       //this.comments = response.data;
 
       this.allDataCount = response.count;
+      this.pageComponent.totalDataCount = this.allDataCount;
       this.output = '查询成功';
     });
   }
@@ -113,6 +115,11 @@ export class CommentComponent implements OnInit {
     });
   }
   saveChange(model:any) {
+    if(this.backup.status==model.status){
+      model.isEdit = false;
+      alert('反正你也没修改，大家就当作无事发生');
+      return;
+    }
     this.commentService.saveChange(model).then(response => {
       if (response) {
         model.isEdit = false;
@@ -121,6 +128,7 @@ export class CommentComponent implements OnInit {
             model.statusdisplay = v.value;
           }
         });
+        this.output = '修改成功';
       } });
   }
   ngOnInit() {

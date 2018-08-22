@@ -26,6 +26,9 @@ export class NavMenuComponent {
       console.log(error);
     });
   }
+  logout(){
+    this.userInfoService.logout();
+  }
   collapse() {
     this.isExpanded = false;
   }

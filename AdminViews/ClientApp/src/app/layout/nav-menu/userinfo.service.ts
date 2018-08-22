@@ -8,11 +8,18 @@ export class UserinfoService {
   public user:IUserModel;
   private token : string;
   private header : HttpHeaders;
-  constructor(private http: HttpClient,private cookieSerivice:CookieService) {
-    this.token = 'bearer '+ this.cookieSerivice.get('token');
+  constructor(private http: HttpClient,private cookieService:CookieService) {
+    this.token = 'bearer '+ this.cookieService.get('token');
     this.header = new HttpHeaders({
       'Authorization':this.token,
     });
+   }
+   logout(){
+     if (confirm('关机睡觉')) {
+      this.cookieService.delete('token');
+      location.href = '/login';
+     }
+
    }
   getUserBase(){
     return this.http.get<any>(apiUrl+ 'api/Identity/GetUser',{headers:this.header}).toPromise().then(result => {
