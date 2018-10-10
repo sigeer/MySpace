@@ -76,7 +76,7 @@ namespace ViewModel
                 return Message.Error;
             }
             var parameters = new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) };
-            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`,`Status`) values('"+guest.Id+"',@content,@aid,'" + DateTime.Now + "',2 )",parameters);
+            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`,`Status`) values('" + guest.Id+"',@content,@aid,'" + DateTime.Now + "',1 );",parameters);
             return result ? Message.Success : Message.Error;
         }
         public ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
@@ -90,7 +90,7 @@ namespace ViewModel
             var dataCount = db.ExecuteQuery("select Count(*) from comment where `comment`.ArticleId=@aid; ",parameters);
             var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
 
-            var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id where `comment`.ArticleId=@aid;", parameters);
+            var data = db.ExecuteQuery("select * from `comment` a  left JOIN person b on a.PosterId=b.Id where a.ArticleId=@aid and  a.status = 1;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
             {
