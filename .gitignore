@@ -316,3 +316,4 @@ __pycache__/
 /WebApp/bin/Debug/netcoreapp2.0
 /BlogWeb/bower_components
 /WebApi/bower_components
+/WebApi/wwwroot/Upload

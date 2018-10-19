@@ -36,7 +36,12 @@ namespace ViewModel
         }
         public string SaveToDb(DbContext db, Article article)
         {
-            var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`,`Viewed`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml,0)", new MySqlParameter[] { new MySqlParameter("content", article.Content), new MySqlParameter("title", article.Title), new MySqlParameter("status", article.Status),new MySqlParameter("status", article.Nohtml) });
+            var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`,`Viewed`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml,0)",
+             new MySqlParameter[] { 
+                 new MySqlParameter("content", article.Content), 
+                 new MySqlParameter("title", article.Title), 
+                 new MySqlParameter("status", article.Status),
+                 new MySqlParameter("nohtml", article.Nohtml) });
             return result ?Message.Success:Message.Error;
         }
         public ResponseModel<List<ArticleSimple>> GetArticleList(DbContext db,int start,int count)

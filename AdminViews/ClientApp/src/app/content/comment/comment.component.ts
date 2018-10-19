@@ -59,6 +59,7 @@ export class CommentComponent implements OnInit {
     if (!confirmResult) {
       return;
     }
+    this.output = '删除中...';
     this.commentService.deleteComment(id).then(response => {
       if (response) {
         this.output = ('删除成功');
@@ -69,6 +70,7 @@ export class CommentComponent implements OnInit {
     });
   }
   getComments() {
+    this.output = '查询中...';
     this.queryModel = { Index: this.pageRequest.index, Count: this.pageRequest.count, Filter: this.filter, Order: this.orderBy };
     this.commentService.queryModel = this.queryModel;
     this.commentService.getComment().then(response => {

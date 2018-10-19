@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using UEditorNetCore;
@@ -15,21 +19,28 @@ namespace WebApi.Controllers
         protected DbContext DbContext => context= HttpContext.RequestServices.GetService(typeof(DbContext)) as DbContext;
         //protected RedisHelper Redis = new RedisHelper("47.94.167.66");
         protected SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("a secret that needs to be at least 16 characters long"));
-    }
-    [EnableCors("any")]
-    [Route("api/[controller]")]
-    public class UEditorController : Controller
-    {
-        private UEditorService ue;
-        public UEditorController(UEditorService ue)
-        {
-            this.ue = ue;
-        }
 
-        public void Do()
+        protected async Task<string> SaveFiles(string directoryPath, string fileName,Stream s)
         {
-            ue.DoAction(HttpContext);
+            try
+            {
+                byte[] bs = new byte[s.Length];
+                s.Read(bs, 0, bs.Length);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                string filePath = Path.Combine(directoryPath, fileName);
+                FileStream fs = new FileStream(filePath, FileMode.Create);
+                await fs.WriteAsync(bs, 0, bs.Length);
+                fs.Close();
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
         }
-
     }
 }

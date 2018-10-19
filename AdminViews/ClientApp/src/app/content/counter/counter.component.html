@@ -1,7 +1,19 @@
-<h1>Counter</h1>
-
-<p>This is a simple example of an Angular component.</p>
-
-<p>Current count: <strong>{{ currentCount }}</strong></p>
-
-<button (click)="incrementCounter()">Increment</button>
+<div class="container-fluid" style="margin-top:20px;">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label>标题：</label>
+                    <input class="form-control" type="text" [(ngModel)]="title" maxlength="50" >
+                </div>
+                <div class="form-group">
+                    <div id="editor">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" (click)="submit()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

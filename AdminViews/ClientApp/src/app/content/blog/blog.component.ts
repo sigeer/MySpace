@@ -27,6 +27,7 @@ export class BlogComponent implements OnInit {
     this.getUserBase();
   }
   getArticle() {
+    this.output = '查询中...';
     this.blogservice.getArticle().then(response=>{
       this.blogs=[];
       response.data.forEach(m => {
@@ -53,6 +54,7 @@ export class BlogComponent implements OnInit {
     if (!confirmResult) {
       return;
     }
+    this.output = '删除中...';
     this.blogservice.deleteArticle(id).then(response => {
       if (response) {
         this.output = ('删除成功');
