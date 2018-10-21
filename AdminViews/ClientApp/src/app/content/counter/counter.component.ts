@@ -36,7 +36,21 @@ export class CounterComponent {
     }
     this.editor.create()
   }
-  submit(){
+  valid() {
+    var isValid = true;
+    if (this.editor.txt.text() == '') {
+      isValid = false;
+      alert("啥都没写发啥发");
+    }
+    return isValid;
+  }
+  submit() {
+    if (!confirm("确定没点错？")) {
+      return;
+    }
+    if (!this.valid()) {
+      return;
+    }
     var postModel = {
       Content:this.editor.txt.html(),
       Nohtml:this.editor.txt.text(),
@@ -46,7 +60,7 @@ export class CounterComponent {
     var result = this.http.post<string>(apiUrl + 'api/post/content', postModel)
     .toPromise()
     .then(response => {
-      alert("ok");
+      alert("发布成功");
       this.cleanInput();
       return response;
     });

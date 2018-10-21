@@ -144,11 +144,15 @@
                     success: function (data, status) {
                         _self.dataLoad = false;
                         _self.getComment();
+                        _self.resetCommentContent();
                     },
                     error: function () {
                         _self.dataLoad = false;
                     }
                 });
+            },
+            resetCommentContent: function () {
+                this.commentModel.Comment = '';
             },
             commentValid: function () {
                 var result = true;

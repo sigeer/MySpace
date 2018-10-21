@@ -12,6 +12,7 @@ using ViewModel;
 
 namespace WebApi.Controllers
 {
+    //[Route("api/identity/[action]")]
     public class IdentityController : BaseApiController
     {
         

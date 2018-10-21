@@ -62,6 +62,9 @@ export class BlogComponent implements OnInit {
         this.blogs.splice(index, 1);
         //this.allDataCount--;
       }
+    }).catch(error => {
+      this.output = "删除失败";
+      console.log(error);
     });
   }
   ngOnInit() {

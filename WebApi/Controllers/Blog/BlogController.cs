@@ -7,6 +7,7 @@ using ViewModel;
 
 namespace WebApi.Controllers
 {
+    [Route("api/guest/blog/[action]")]
     public class BlogController : BaseApiController
     {
         [HttpPost]
@@ -19,12 +20,12 @@ namespace WebApi.Controllers
         public  ResponseModel<List<ArticleSimple>> GetArticleList(int index, int count)
         {
             var start = (index - 1) * count;
-            return new ArticleSerivce().GetArticleList(DbContext, start, count);
+            return ArticleSerivce.GetArticleList(DbContext, start, count);
         }
         [HttpPost]
         public ResponseModel<List<Comment>> GetCommentList([FromBody]QueryModel queryModel)
         {
-            return new CommentService().GetCommentList(DbContext, queryModel);
+            return CommentService.GetCommentList(DbContext, queryModel);
         }
         [HttpPost]
         public bool DeleteComment([FromBody]JObject jObject)

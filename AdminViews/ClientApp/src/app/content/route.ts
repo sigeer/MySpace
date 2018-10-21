@@ -21,7 +21,7 @@ export const routes : Routes = [
             // { path: 'blogmanagement', loadChildren: './charts/charts.module#ChartsModule' },
             // { path: 'commentmanagement', loadChildren: './tables/tables.module#TablesModule' },
                 { path: 'home', component: HomeComponent },
-                { path: 'counter', component: CounterComponent },
+                { path: 'post', component: CounterComponent },
                 { path: 'fetch-data', component: FetchDataComponent },
                 { path: 'blogmanagement', component: BlogComponent },
                 { path: 'commentmanagement', component: CommentComponent }

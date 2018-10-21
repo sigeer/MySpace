@@ -3,12 +3,9 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using UEditorNetCore;
 using Utility.DbHelper;
-using Utility.RedisHelper;
 
 namespace WebApi.Controllers
 {

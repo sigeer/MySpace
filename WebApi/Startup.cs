@@ -7,8 +7,6 @@ using Utility.DbHelper;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using WebApi.Controllers;
-using UEditorNetCore;
 using Newtonsoft.Json;
 
 namespace WebApi
@@ -26,7 +24,6 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddUEditorService();
             services.AddMvc().AddJsonOptions(option=>
             {
                 option.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -86,8 +83,8 @@ namespace WebApi
                     name: "default",
                     template: "api/{controller}/{action}/{id?}");
             });
-            
-            
+
+
 
 
         }

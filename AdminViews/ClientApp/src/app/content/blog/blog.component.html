@@ -32,8 +32,10 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr *ngFor='let x of blogs'>
-                                    <td></td>
+                                  <tr *ngFor='let x of blogs;let i = index'>
+                                    <td>
+                                      {{i+1}}
+                                    </td>
                                     <td>
                                       {{x.title}}
                                     </td>

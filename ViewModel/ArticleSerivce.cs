@@ -44,13 +44,13 @@ namespace ViewModel
                  new MySqlParameter("nohtml", article.Nohtml) });
             return result ?Message.Success:Message.Error;
         }
-        public ResponseModel<List<ArticleSimple>> GetArticleList(DbContext db,int start,int count)
+        public static ResponseModel<List<ArticleSimple>> GetArticleList(DbContext db,int start,int count)
         {
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
             var dataCount = db.ExecuteQuery("select Count(*) from article");
             var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
             List<ArticleSimple> list = new List<ArticleSimple>();
-            var data = db.ExecuteQuery("SELECT  article.*,COUNT(comment.articleid) AS commentcount  FROM article LEFT JOIN comment ON article.`Id` = comment.`ArticleId` GROUP BY article.id  ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
+            var data = db.ExecuteQuery("SELECT  article.*,COUNT(comment.articleid) AS commentcount  FROM article LEFT JOIN comment ON article.`Id` = comment.`ArticleId` where article.`status`=1 GROUP BY article.id   ORDER BY `CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
             {
@@ -70,6 +70,12 @@ namespace ViewModel
             }
             return new ResponseModel<List<ArticleSimple>>(list,Count);
         }
+        public static bool Delete(DbContext db, int id)
+        {
+            var sqlStr = "UPDATE article a SET STATUS =  ( CASE WHEN a.`Status`<=-5 THEN a.`Status` ELSE a.`Status`-1 END )  WHERE a.id = " + id;
+            var exeResult = db.ExecuteNonQuery(sqlStr);
+            return exeResult;
+        }
     }
     
     public class CommentService
@@ -81,7 +87,10 @@ namespace ViewModel
                 return Message.Error;
             }
             var parameters = new MySqlParameter[] { new MySqlParameter("content", content), new MySqlParameter("aid", aId) };
-            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`,`Status`) values('" + guest.Id+"',@content,@aid,'" + DateTime.Now + "',1 );",parameters);
+            //这个datetime.now在本地ok  live出错 怀疑是系统原因
+            var result = db.ExecuteNonQuery("insert into comment(`PosterId`,`content`,`ArticleId`,`CreateTime`,`Status`) "+
+                "values('" + guest.Id+"',@content,@aid,'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "',1 );"
+                ,parameters);
             return result ? Message.Success : Message.Error;
         }
         public ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
@@ -109,7 +118,7 @@ namespace ViewModel
             }
             return new ResponseModel<List<Comment>>(list,Count);
         }
-        public ResponseModel<List<Comment>> GetCommentList(DbContext db,QueryModel queryModel)
+        public static ResponseModel<List<Comment>> GetCommentList(DbContext db,QueryModel queryModel)
         {
             var start = (queryModel.Index - 1) * queryModel.Count;
 
@@ -168,7 +177,7 @@ namespace ViewModel
 
         public static bool Delete(DbContext dbContext,int id)
         {
-            var sqlStr = "UPDATE COMMENT a SET STATUS =  ( CASE WHEN a.`Status`<=-5 THEN a.`Status` ELSE a.`Status`-1 END )  WHERE a.id = " + id;
+            var sqlStr = "UPDATE comment a SET STATUS =  ( CASE WHEN a.`Status`<=-5 THEN a.`Status` ELSE a.`Status`-1 END )  WHERE a.id = " + id;
             var exeResult = dbContext.ExecuteNonQuery(sqlStr);
             return exeResult;
         }

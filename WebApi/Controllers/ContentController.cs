@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         public ResponseModel<List<ArticleSimple>> GetTitles(int index, int count)
         {
             var start = (index - 1) * count;
-            return new ArticleSerivce().GetArticleList(DbContext, start, count);
+            return  ArticleSerivce.GetArticleList(DbContext, start, count);
         }
         public Article GetArticle(int Aid)
         {
