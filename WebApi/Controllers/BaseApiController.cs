@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Utility;
 using Utility.DbHelper;
 
 namespace WebApi.Controllers
@@ -37,7 +38,74 @@ namespace WebApi.Controllers
             {
                 return null;
             }
-            
         }
+        protected async Task<UploadFileInfo> UploadSingleFile(string targetPath,FileType fileType,bool needExtension = false)
+        {
+            if (HttpContext.Request.Form.Files.Count==0)
+            {
+                return null;
+            }
+            UploadFileInfo result = new UploadFileInfo();
+            var item = HttpContext.Request.Form.Files[0];
+            string fileName = item.FileName;
+            result.OldName = fileName;
+            if (fileName.Length > 100)
+            {
+                result.Result = "UPLOAD_FILENAMEINVALID";
+                return result;
+            }
+            if (!AllowdFormat.IsAllowed(fileName, fileType))
+            {
+                switch (fileType)
+                {
+                    case FileType.Image:
+                        result.Result = "UPLOAD_IMAGE";
+                        break;
+                    case FileType.Excel:
+                        result.Result = "UPLOAD_EXCEL";
+                        break;
+                    default:
+                        break;
+                }
+                return result;
+            }
+            if (item.Length > 1024 * 1024 * 20)
+            {
+                result.Result = "UPLOAD_FILESIZE";
+                return result;
+            }
+            string extension = string.Empty;
+            if (needExtension&&fileName.IndexOf(".") >= 0)
+            {
+                extension = fileName.Substring(fileName.LastIndexOf("."), (fileName.Length - fileName.LastIndexOf(".")));
+            }
+            using (Stream s = item.OpenReadStream())
+            {
+                var tempFileName = Guid.NewGuid().ToString() + extension;
+                var filePath = await SaveFiles(targetPath, tempFileName.ToString(), s);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    result.Result = "UPLOAD_OTHERERROR";
+                    return result;
+                    //非代码控制的其他原因导致的上传失败
+                }
+                else
+                {
+                    result.NewName = tempFileName;
+                    result.Result = Message.Success;
+                    result.TotalPath = filePath;
+                }
+            }
+
+            return result;
+        }
+    }
+    public class UploadFileInfo
+    {
+        public string OldName { get; set; }
+        public string NewName { get; set; }
+        public string TotalPath { get; set; }
+        public string Result { get; set; }
+
     }
 }

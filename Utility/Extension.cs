@@ -5,6 +5,45 @@ using System.Text;
 
 namespace Utility
 {
+    public enum FileType
+    {
+        Image = 1,
+        Excel = 2
+    }
+    public static class AllowdFormat
+    {
+        public static string[] Images { get; set; } = new string[11] { ".PNG", ".BMP", ".JPE", ".JPEG", ".JPG", ".JFIF", ".GIF", ".TIF", ".TIFF", ".DIB", ".PDF" };
+        public static string[] Excel { get; set; } = new string[2] { ".XLS", ".XLSX" };
+        public static bool IsAllowed(string fileName, FileType fileType)
+        {
+            fileName = fileName.ToUpper();
+            var fileLen = fileName.Length;
+            string[] unknownType;
+            switch (fileType)
+            {
+                case FileType.Image:
+                    unknownType = Images;
+                    break;
+                case FileType.Excel:
+                    unknownType = Excel;
+                    break;
+                default:
+                    unknownType = new string[] { };
+                    break;
+            }
+            foreach (var item in unknownType)
+            {
+                var itemlen = item.Length;
+                var index = fileName.LastIndexOf(item);
+                if ((index + itemlen) == fileLen)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }    
     public class Extension
     {
     }

@@ -31,7 +31,7 @@
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <div v-for="x in existComments">
-                                            <small>{{x.guest.ip}}&nbsp;({{x.createTime}})</small>
+                                            <small>({{x.createTime}})</small>
                                             <p>{{x.content}}</p>
                                             <hr />
                                         </div>
@@ -91,9 +91,12 @@
             model: {},
             dataLoad: true,
             existComments: [],
-            commentModel: { Email: '', Comment: '', AId: getQueryStringByName("AId") }
+            commentModel: { Email: '', Comment: '', AId: 0 },
+            articleId:0,
         },
         mounted() {
+            this.articleId = getQueryStringByName("AId");
+            this.commentModel.AId = this.articleId;
             this.initData();
         },
         methods: {
@@ -102,7 +105,7 @@
                 //$(".sigeer-loader").fadeOut("slow");
                 var _self = this;
                 $.ajax({
-                    url: apiUrl + '/api/Content/GetArticle?AId=' + getQueryStringByName("AId"),
+                    url: apiUrl + '/blog/getarticle?id=' + _self.articleId,
                     method: 'get',
                     success: function (data, status) {
                         _self.dataLoad = false;
@@ -118,7 +121,7 @@
                 this.dataLoad = true;
                 var _self = this;
                 $.ajax({
-                    url: apiUrl + '/api/Content/GetComment?AId=' + getQueryStringByName("AId"),
+                    url: apiUrl + '/blog/getcomment?id=' + _self.articleId,
                     method: 'get',
                     success: function (data, status) {
                         _self.dataLoad = false;
@@ -137,7 +140,7 @@
                 this.dataLoad = true;
                 var _self = this;
                 $.ajax({
-                    url: apiUrl + '/api/Content/SendComment',
+                    url: apiUrl + '/blog/SendComment',
                     method: 'post',
                     contentType: 'application/json;charset=UTF-8',
                     data: JSON.stringify(_self.commentModel),

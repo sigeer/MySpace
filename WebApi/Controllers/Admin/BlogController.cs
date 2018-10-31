@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -15,13 +17,38 @@ namespace WebApi.Controllers.Admin
     [Route("api/admin/blog/[action]")]
     public class BlogController : BaseApiController
     {
-        [HttpPost]
-        public ResponseMessage Post(Article article)
+        private readonly IHostingEnvironment  _hostingEnvironment;
+        public BlogController(IHostingEnvironment hostingEnvironment)
         {
-            ArticleSerivce asv = new ArticleSerivce();
-            asv.SaveToDb(DbContext, article);
-            return new ResponseMessage(Message.Success);
+            _hostingEnvironment = hostingEnvironment;
         }
+       [HttpPost]
+       public async Task<IActionResult> Upload()
+       {
+           string directoryPath = Path.Combine(_hostingEnvironment.WebRootPath , "Upload");
+           var fileResult = await UploadSingleFile(directoryPath,FileType.Image,true);
+           if (fileResult!=null)
+           {
+               if (fileResult.Result==Message.Success)
+               {
+                    return Ok(new {url="/Upload/"+fileResult.NewName});
+               }
+               else
+               {
+                   return Ok(fileResult.Result);
+               }
+           }
+           else
+           {
+                return Ok("no data");
+           }
+       }
+       [HttpPost]
+       public string Post([FromBody]Article article)
+       {
+           var result = new ArticleSerivce().SaveToDb(DbContext,article);
+           return result;
+       }
         [HttpGet]
         public ResponseModel<List<ArticleSimple>> GetList(int index, int count)
         {

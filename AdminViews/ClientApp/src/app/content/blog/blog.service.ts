@@ -6,12 +6,10 @@ import {apiUrl,PageRequest} from '../../baseConfig';
 @Injectable()
 export class BlogService {
   public pageRequest: PageRequest;
-  private rootUrl: string;
   constructor(private http: HttpClient) {
-    this.rootUrl = apiUrl + '/api/admin/blog/';
   }
   getArticle() {
-    var result = this.http.get<returnResult>(this.rootUrl + '/getlist?index=' + this.pageRequest.index + '&count=' + this.pageRequest.count)
+    var result = this.http.get<returnResult>(apiUrl + '/blog/getlist?index=' + this.pageRequest.index + '&count=' + this.pageRequest.count)
      .toPromise<returnResult>()
      .then(response => {
       return response;
@@ -20,7 +18,7 @@ export class BlogService {
   }
   deleteArticle(id:number) {
     var currentUrl = new URL(location.href).pathname;
-    return this.http.post<returnResult>(this.rootUrl + '/delete?fromUrl='+currentUrl, { id: id }).toPromise().then(result => {
+    return this.http.post<returnResult>(apiUrl + '/blog/delete?fromUrl='+currentUrl, { id: id }).toPromise().then(result => {
       return result;
     });
 

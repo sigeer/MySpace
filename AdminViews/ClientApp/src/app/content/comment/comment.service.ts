@@ -6,10 +6,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class CommentService {
   public queryModel: QueryModel;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+  }
   
   getComment() {
-    var result = this.http.post<returnResult>(apiUrl + 'api/Blog/GetCommentList', this.queryModel)
+    var result = this.http.post<returnResult>(apiUrl + '/comment/getlist', this.queryModel)
       .toPromise()
       .then(response => {
         return response;
@@ -18,7 +19,7 @@ export class CommentService {
   }
   deleteComment(id: number) {
     var currentUrl = new URL(location.href).pathname;
-    var result = this.http.post<boolean>(apiUrl + 'api/Blog/DeleteComment', {id:id})
+    var result = this.http.post<boolean>(apiUrl + '/comment/delete', {id:id})
       .toPromise()
       .then(response => {
         return response;
@@ -26,7 +27,7 @@ export class CommentService {
     return result;
   }
   getBaseSettings() {
-    var result = this.http.get<returnResult>(apiUrl + 'api/Blog/GetCommentSettings')
+    var result = this.http.get<returnResult>(apiUrl + '/comment/getbase')
       .toPromise()
       .then(response => {
         return response;
@@ -36,7 +37,7 @@ export class CommentService {
   saveChange(model: any) {
     let postModel = { status: model.status,id:model.id };
     var currentUrl = new URL(location.href).pathname;
-    var result = this.http.post<boolean>(apiUrl + 'api/Blog/ModifyComment?from=' + currentUrl, postModel)
+    var result = this.http.post<boolean>(apiUrl + '/comment/modify?from=' + currentUrl, postModel)
       .toPromise()
       .then(response => {
         return response;
