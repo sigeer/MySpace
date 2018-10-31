@@ -80,7 +80,7 @@ namespace ViewModel
     
     public class CommentService
     {
-        public string PostComment(DbContext db, string content,GuestModel guest,int aId)
+        public static string PostComment(DbContext db, string content,GuestModel guest,int aId)
         {
             if (aId==0||guest.Id==0)
             {
@@ -93,7 +93,7 @@ namespace ViewModel
                 ,parameters);
             return result ? Message.Success : Message.Error;
         }
-        public ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
+        public static ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
         {
             if (aId==0)
             {

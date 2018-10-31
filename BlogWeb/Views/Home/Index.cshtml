@@ -80,7 +80,7 @@
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                     },
-                    url: apiUrl + '/api/Content/GetTitles?index=' + _self.index + '&count=' + _self.count,
+                    url: apiUrl + '/blog/index?index=' + _self.index + '&count=' + _self.count,
                     method: 'get',
                     success: function (data, status) {
                         _self.dataLoad = false;

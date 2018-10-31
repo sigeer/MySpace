@@ -14,7 +14,15 @@ namespace BlogWeb
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+            var host = WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(config)
+                .UseStartup<Startup>()
+                .Build();
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

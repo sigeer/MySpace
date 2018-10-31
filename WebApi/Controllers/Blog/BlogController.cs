@@ -10,38 +10,32 @@ namespace WebApi.Controllers
     [Route("api/guest/blog/[action]")]
     public class BlogController : BaseApiController
     {
-        [HttpPost]
-        public ResponseMessage PostArticle(Article article)
-        {
-            ArticleSerivce asv = new ArticleSerivce();
-            asv.SaveToDb(DbContext, article);
-            return new ResponseMessage(Message.Success);
-        }
-        public  ResponseModel<List<ArticleSimple>> GetArticleList(int index, int count)
+
+        [HttpGet]
+        public ResponseModel<List<ArticleSimple>> Index(int index, int count)
         {
             var start = (index - 1) * count;
-            return ArticleSerivce.GetArticleList(DbContext, start, count);
+            return  ArticleSerivce.GetArticleList(DbContext, start, count);
+        }
+        public Article GetArticle(int id)
+        {
+            return new ArticleSerivce().GetArticle(DbContext, id);
+        }
+        public ResponseModel<List<Comment>> GetComment(int id)
+        {
+            return CommentService.GetCommentsInArticle(DbContext, id);
         }
         [HttpPost]
-        public ResponseModel<List<Comment>> GetCommentList([FromBody]QueryModel queryModel)
+        public string SendComment([FromBody]dynamic model)
         {
-            return CommentService.GetCommentList(DbContext, queryModel);
+            var email = model.Email.ToString();
+            var ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            int aid = int.Parse(model.AId.ToString());
+            string comment = model.Comment.ToString();
+            var guest = new UserService().GetGuest(DbContext, email, ip.ToString());
+            var result = CommentService.PostComment(DbContext, comment, guest,aid);
+            return result;
         }
-        [HttpPost]
-        public bool DeleteComment([FromBody]JObject jObject)
-        {
-            return CommentService.Delete(DbContext,jObject["id"].Value<int>());
-        }
-        [HttpPost]
-        public bool ModifyComment([FromBody]JObject jObject)
-        {
-            return CommentService.Modify(DbContext, jObject["id"].Value<int>(), jObject["status"].Value<int>());
-        }
-        [HttpGet]
-        public ResponseModel<List<KeyValue>> GetCommentSettings()
-        {
-            var data =  CommentService.GetBaseSettings(DbContext);
-            return new ResponseModel<List<KeyValue>>(data,data.Count);
-        }
+
     }
 }
