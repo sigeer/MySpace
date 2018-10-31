@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         }
         public Article GetArticle(int id)
         {
-            return new ArticleSerivce().GetArticle(DbContext, id);
+            return ArticleSerivce.GetArticle(DbContext, id);
         }
         public ResponseModel<List<Comment>> GetComment(int id)
         {

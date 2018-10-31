@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-xs-9">
                         <div class="list-group">
-                            <a href="javascript:;" v-for="x in titleList" class="list-group-item">
+                            <a v-bind:href="'/Home/Article/'+x.id" v-for="x in titleList" class="list-group-item">
                                 <h2 class="list-group-item-heading" v-on:click="getArticle(x.id)">{{x.title}}</h2>
                                 <p class="list-group-item-text">
                                     {{x.nohtml}}...
@@ -92,7 +92,7 @@
             },
             getArticle: function (id) {
                 //window.open('/Home/Article?AId=' + id);
-                location.href = '/Home/Article?AId=' + id;
+                location.href = '/Home/Article/' + id;
             }
         },
     });
