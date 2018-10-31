@@ -14,8 +14,9 @@ namespace BlogWeb.Controllers
         {
             return View();
         }
-        public IActionResult Article()
+        public IActionResult Article(int id)
         {
+            ViewData["articleId"]= id;
             return View();
         }
     }

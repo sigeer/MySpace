@@ -12,7 +12,7 @@ namespace ViewModel
 {
     public class ArticleSerivce
     {
-        public Article GetArticle(DbContext db,int id)
+        public static Article GetArticle(DbContext db,int id)
         {
             MySqlParameter parameter = new MySqlParameter("id", id);
             var data = db.ExecuteQuery("select * from article where Id=@id;update article set Viewed=Viewed + 1 where Id=@id", parameter);
@@ -34,7 +34,7 @@ namespace ViewModel
             article.CreateTime = flag?dt:DateTime.MinValue;
             return article;
         }
-        public string SaveToDb(DbContext db, Article article)
+        public static string SaveToDb(DbContext db, Article article)
         {
             var result = db.ExecuteNonQuery("insert into article(`title`,`maincontent`,`createtime`,`Status`,`Nohtml`,`Viewed`) values(@title,@content,'" + DateTime.Now + "',@status,@nohtml,0)",
              new MySqlParameter[] { 

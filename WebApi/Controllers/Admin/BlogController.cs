@@ -46,7 +46,7 @@ namespace WebApi.Controllers.Admin
        [HttpPost]
        public string Post([FromBody]Article article)
        {
-           var result = new ArticleSerivce().SaveToDb(DbContext,article);
+           var result = ArticleSerivce.SaveToDb(DbContext,article);
            return result;
        }
         [HttpGet]

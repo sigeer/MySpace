@@ -85,7 +85,7 @@
     </div>
 </div>
 <script>
-    var titleConten = new Vue({
+    var titleContent = new Vue({
         el: '#articleContent',
         data: {
             model: {},
@@ -95,7 +95,7 @@
             articleId:0,
         },
         mounted() {
-            this.articleId = getQueryStringByName("AId");
+            this.articleId = @ViewData["articleId"];
             this.commentModel.AId = this.articleId;
             this.initData();
         },
