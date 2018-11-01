@@ -120,6 +120,14 @@ namespace ViewModel
         }
         public static ResponseModel<List<Comment>> GetCommentList(DbContext db,QueryModel queryModel)
         {
+            return GetList(db, queryModel, 1);
+        }
+        public static ResponseModel<List<Comment>> GetCommentTrash(DbContext db, QueryModel queryModel)
+        {
+            return GetList(db, queryModel, 2);
+        }
+        public static ResponseModel<List<Comment>> GetList(DbContext db, QueryModel queryModel,int type)
+        {
             var start = (queryModel.Index - 1) * queryModel.Count;
 
             List<Comment> list = new List<Comment>();
@@ -130,30 +138,31 @@ namespace ViewModel
                     new MySqlParameter("status", queryModel.Filter.Status),
                     new MySqlParameter("start", start),
                     new MySqlParameter("count", queryModel.Count)};
-            string whereSql = "";
-            if (queryModel.Filter.ArticleId!=0)
+            string whereSql = type == 1 ? "`comment`.status>0 " : "`comment`.status<0";
+            if (queryModel.Filter.ArticleId != 0)
             {
-                whereSql += "`comment`.ArticleId = @aid";
+                whereSql += "and `comment`.ArticleId = @aid";
             }
-            if (queryModel.Filter.Status!=0)
+            if (queryModel.Filter.Status != 0 && type == 1)
             {
-                whereSql += "`comment`.status = @status";
+                whereSql += " and `comment`.status = @status";
+                
             }
-            if (queryModel.Filter.PosterId!=0)
+            if (queryModel.Filter.PosterId != 0)
             {
-                whereSql += whereSql.Length > 0 ? " and `comment`.PosterId = @pid" : " `comment`.PosterId = @pid";
+                whereSql += " and `comment`.PosterId = @pid";
             }
             if (!string.IsNullOrEmpty(queryModel.Filter.Str))
             {
-                whereSql += " `comment`.Content like @str";
+                whereSql +=" and `comment`.Content like @str";
             }
-            if (whereSql.Length>0)
+            if (whereSql.Length > 0)
             {
                 whereSql = " where " + whereSql;
             }
-            var dataCount = db.ExecuteQuery("select Count(*) from comment "+whereSql,parameters);
-            var Count =Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
-            var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql +" ORDER BY `comment`.`CreateTime` DESC limit @start,@count;", parameters);
+            var dataCount = db.ExecuteQuery("select Count(*) from comment " + whereSql, parameters);
+            var Count = Convert.ToInt32(dataCount.Tables[0].Rows[0].ItemArray[0]);
+            var data = db.ExecuteQuery("select * from `comment` left JOIN person on `comment`.PosterId=person.Id left join article on `comment`.ArticleId = article.Id " + whereSql + " ORDER BY `comment`.`CreateTime` DESC limit @start,@count;", parameters);
 
             foreach (DataRow item in data.Tables[0].Rows)
             {
@@ -162,22 +171,21 @@ namespace ViewModel
                 int temp;
                 comment.Guest = new GuestModel() { ContactInfo = item["ContactInfo"].ToString(), Id = int.Parse(item["PosterId"].ToString()), IP = item["IP"].ToString(), FirstVisitedTime = Convert.ToDateTime(item["FirstVisitedTime"]), Status = 1 };
                 var content = item["Content"].ToString();
-                comment.Content = content.Length>13?content.Substring(0,10)+"...":content;
-                
+                comment.Content = content.Length > 13 ? content.Substring(0, 10) + "..." : content;
+
                 comment.Id = Convert.ToInt32(item["Id"]);
                 comment.Article = new Article() { Id = Convert.ToInt32(item["ArticleId"]), Title = item["Title"].ToString() };
                 bool flag = DateTime.TryParse(item["CreateTime"].ToString(), out dt);
                 comment.CreateTime = flag ? dt : DateTime.MinValue;
-                flag = int.TryParse(item["Status"].ToString(),out temp);
+                flag = int.TryParse(item["Status"].ToString(), out temp);
                 comment.Status = temp;
                 list.Add(comment);
             }
-            return new ResponseModel<List<Comment>>(list,Count);
+            return new ResponseModel<List<Comment>>(list, Count);
         }
-
         public static bool Delete(DbContext dbContext,int id)
         {
-            var sqlStr = "UPDATE comment a SET STATUS =  ( CASE WHEN a.`Status`<=-5 THEN a.`Status` ELSE a.`Status`-1 END )  WHERE a.id = " + id;
+            var sqlStr = "UPDATE comment a SET STATUS =  ( CASE WHEN a.`Status`<=-5 THEN a.`Status` ELSE (CASE WHEN a.`Status`< 1 THEN a.`Status`-1  ELSE -1 END ) END )  WHERE a.id = " + id;
             var exeResult = dbContext.ExecuteNonQuery(sqlStr);
             return exeResult;
         }
