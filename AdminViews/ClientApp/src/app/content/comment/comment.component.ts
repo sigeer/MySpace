@@ -63,9 +63,7 @@ export class CommentComponent implements OnInit {
     this.commentService.deleteComment(id).then(response => {
       if (response) {
         this.output = ('删除成功');
-        var index = this.comments.findIndex(v => v.id == id);
-        this.comments.splice(index, 1);
-        this.allDataCount--;
+        this.getComments();
       }
     });
   }
@@ -83,6 +81,30 @@ export class CommentComponent implements OnInit {
             response.data[i].statusdisplay = v.value;
           }
           
+        })
+        this.comments.push(response.data[i]);
+      }
+      //this.comments = response.data;
+
+      this.allDataCount = response.count;
+      this.pageComponent.totalDataCount = this.allDataCount;
+      this.output = '查询成功';
+    });
+  }
+  getCommentTrash() {
+    this.output = '查询中...';
+    this.queryModel = { Index: this.pageRequest.index, Count: this.pageRequest.count, Filter: this.filter, Order: this.orderBy };
+    this.commentService.queryModel = this.queryModel;
+    this.commentService.getCommentTrash().then(response => {
+      this.comments = [];
+      for (var i = 0; i < response.data.length; i++) {
+        response.data[i].index = i + 1;
+        response.data[i].timedisplay = Untility.dateTimeDisplay(response.data[i].createTime);
+        this.allStatus.forEach(v => {
+          if (v.key == response.data[i].status) {
+            response.data[i].statusdisplay = v.value;
+          }
+
         })
         this.comments.push(response.data[i]);
       }

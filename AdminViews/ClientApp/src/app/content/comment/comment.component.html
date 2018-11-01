@@ -4,6 +4,7 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <span>{{output}}</span>
+          <span class="label label-success" *ngFor="let x of filterBackup">{{x.str}} <i style="cursor:pointer;" (click)="removeFilter(x)">&times;</i></span>
         </div>
         <div class="panel-body">
           <div class="form-horizontal">
@@ -17,14 +18,9 @@
                     <option *ngFor="let x of allStatus" value="{{x.key}}">{{x.value}}</option>
                   </select>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-4">
                   <button class="btn btn-primary" (click)="getComments()">搜索</button>
-                </div>
-              </div>
-              <div>
-                <label>搜索条件</label>
-                <div>
-                  <span class="label label-success" *ngFor="let x of filterBackup">{{x.str}} <i style="cursor:pointer;" (click)="removeFilter(x)">&times;</i></span>
+                  <button class="btn btn-default" (click)="getCommentTrash()">回收站</button>
                 </div>
               </div>
             </div>

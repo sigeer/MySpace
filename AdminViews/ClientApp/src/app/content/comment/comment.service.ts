@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { apiUrl, PageRequest } from '../../baseConfig'
+import { apiUrl, PageRequest, Untility } from '../../baseConfig'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
@@ -10,7 +10,15 @@ export class CommentService {
   }
   
   getComment() {
-    var result = this.http.post<returnResult>(apiUrl + '/comment/getlist', this.queryModel)
+    var result = this.http.get<returnResult>(apiUrl + '/comment/getlist?' + Untility.setQuertString(this.queryModel))
+      .toPromise()
+      .then(response => {
+        return response;
+      });
+    return result;
+  }
+  getCommentTrash() {
+    var result = this.http.get<returnResult>(apiUrl + '/comment/getTrash?' + Untility.setQuertString(this.queryModel))
       .toPromise()
       .then(response => {
         return response;

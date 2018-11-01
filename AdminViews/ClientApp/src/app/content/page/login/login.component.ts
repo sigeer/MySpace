@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   };
   constructor(private http: HttpClient,private cookieService:CookieService) { }
   login() {
-    this.http.post<any>(apiUrl + 'api/Identity/GetToken', this.form).toPromise().then(result => {
+    this.http.post<any>(apiUrl + '/Identity/GetToken', this.form).toPromise().then(result => {
       var token = result.token;
       this.cookieService.set("token", token);
       //console.log(JSON.stringify(error))

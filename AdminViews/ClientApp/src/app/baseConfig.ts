@@ -16,6 +16,21 @@ export class Untility{
       return '';
     }
   }
+  static setQuertString(model: any) {
+    var keys = Object.keys(model);
+    var str = "";
+    for (var i = 0; i < keys.length; i++) {
+      var item = keys[i];
+      if (typeof (model[item]) == "object") {
+        str += this.setQuertString(model[item]);
+      }
+      else {
+        str += "&" + item + "=" + model[item];
+      }
+      
+    }
+    return str;
+  }
   static getType(obj){
     //tostring会返回对应不同的标签的构造函数
     var toString = Object.prototype.toString;

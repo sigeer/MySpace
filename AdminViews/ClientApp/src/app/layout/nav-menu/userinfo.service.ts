@@ -22,7 +22,7 @@ export class UserinfoService {
 
    }
   getUserBase(){
-    return this.http.get<any>(apiUrl+ 'api/Identity/GetUser',{headers:this.header}).toPromise().then(result => {
+    return this.http.get<any>(apiUrl+ '/Identity/GetUser',{headers:this.header}).toPromise().then(result => {
       this.user={
         nickname : result.item1,
         headpic : result.item2
