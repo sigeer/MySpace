@@ -11,11 +11,7 @@ namespace AdminViews.Controllers
         public IActionResult Index()
         {
             
-            return View();
-        }
-        public IActionResult Login()
-        {
-            return View();
+            return Redirect("/");
         }
     }
 }

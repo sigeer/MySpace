@@ -4,7 +4,7 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <span>{{output}}</span>
-          <span class="label label-success" *ngFor="let x of filterBackup">{{x.str}} <i style="cursor:pointer;" (click)="removeFilter(x)">&times;</i></span>
+          <span class="label label-success" *ngFor="let x of filterBackup">{{x.type==1?'文章':'评论者'}}：{{x.str}} <i style="cursor:pointer;" (click)="removeFilter(x)">&times;</i></span>
         </div>
         <div class="panel-body">
           <div class="form-horizontal">

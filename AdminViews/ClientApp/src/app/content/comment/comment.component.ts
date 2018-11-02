@@ -117,12 +117,23 @@ export class CommentComponent implements OnInit {
   }
   filterFromArticle(model: any) {
     this.filter.ArticleId = model.id;
-    this.filterBackup.push({ type: 1, str: model.title });
+    var filter = this.filterBackup.find(v=>v.type==1);
+    if (filter!=null) {
+      filter.str = model.title;
+    }else {
+      this.filterBackup.push({ type: 1, str: model.title });
+    }
     this.getComments();
   }
   filterFromPoster(model: any) {
     this.filter.PosterId = model.id;
-    this.filterBackup.push({ type: 2, str: model.contactInfo });
+    var filter = this.filterBackup.find(v=>v.type==2);
+    if (filter!=null) {
+      filter.str = model.contactInfo;
+    } 
+    else{
+      this.filterBackup.push({ type: 2, str: model.contactInfo });
+    }
     this.getComments();
   }
   removeFilter(model: any) {
@@ -141,7 +152,7 @@ export class CommentComponent implements OnInit {
   saveChange(model:any) {
     if(this.backup.status==model.status){
       model.isEdit = false;
-      alert('反正你也没修改，大家就当作无事发生');
+      alert('反正你也没修改，大家就当作唔事发生');
       return;
     }
     this.commentService.saveChange(model).then(response => {
