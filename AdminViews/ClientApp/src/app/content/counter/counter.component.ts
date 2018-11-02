@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { apiUrl, PageRequest } from '../../baseConfig'
+import { apiUrl, PageRequest, api } from '../../baseConfig'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 declare var window:any;
@@ -30,7 +30,7 @@ export class CounterComponent {
             // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
             var url =result.url;
             if (url!=null) {
-              insertImg(apiUrl+url);
+              insertImg(api+url);
             }
             else  {
               alert(result);

@@ -10,7 +10,7 @@ export class CommentService {
   }
   
   getComment() {
-    var result = this.http.get<returnResult>(apiUrl + '/comment/getlist?' + Untility.setQuertString(this.queryModel))
+    var result = this.http.get<returnResult>(apiUrl + '/comment/getlist?' + Untility.setQueryString(this.queryModel))
       .toPromise()
       .then(response => {
         return response;
@@ -18,7 +18,7 @@ export class CommentService {
     return result;
   }
   getCommentTrash() {
-    var result = this.http.get<returnResult>(apiUrl + '/comment/getTrash?' + Untility.setQuertString(this.queryModel))
+    var result = this.http.get<returnResult>(apiUrl + '/comment/getTrash?' + Untility.setQueryString(this.queryModel))
       .toPromise()
       .then(response => {
         return response;

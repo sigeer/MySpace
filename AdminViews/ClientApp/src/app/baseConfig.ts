@@ -1,4 +1,5 @@
 export const apiUrl:string = 'http://localhost:8092/api/admin';
+export const api:string = 'http://localhost:8092/';
 export class PageRequest {
     index: number;
     count: number;
@@ -16,13 +17,13 @@ export class Untility{
       return '';
     }
   }
-  static setQuertString(model: any) {
+  static setQueryString(model: any) {
     var keys = Object.keys(model);
     var str = "";
     for (var i = 0; i < keys.length; i++) {
       var item = keys[i];
       if (typeof (model[item]) == "object") {
-        str += this.setQuertString(model[item]);
+        str += this.setQueryString(model[item]);
       }
       else {
         str += "&" + item + "=" + model[item];
