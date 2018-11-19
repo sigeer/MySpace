@@ -76,12 +76,13 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (!env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
+                //app.UseApiError();//区别是很多错误没法自定义
                 app.UseExceptionHandler((handle)=>
                 {
                     handle.Run(async context =>
@@ -97,7 +98,6 @@ namespace WebApi
                             await context.Response.WriteAsync(jsonModel);
                         }
                     });
-                    
                 });
             }
 
