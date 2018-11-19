@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Globalization;
+using System.Net;
 using System.Threading.Tasks;
+using Utility;
+using Utility.Exceptions;
 
 namespace WebApi.Middlewares
 {
@@ -14,28 +18,33 @@ namespace WebApi.Middlewares
             _next = next;
         }
 
-        public Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
-            var cultureQuery = context.Request.Query["culture"];
-            if (!string.IsNullOrWhiteSpace(cultureQuery))
+            try
             {
-                var culture = new CultureInfo(cultureQuery);
-
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-
+                await _next(context);
             }
-
-            // Call the next delegate/middleware in the pipeline
-            return this._next(context);
+            catch (Exception ex)
+            {
+                Console.WriteLine(context.Response.StatusCode);
+                if (ex is SigeerException)
+                {
+                    var myException = ex as SigeerException;
+                    var jsonModel = new ResponseMessage("Request",Message.Error,myException.Message,myException.Params).ToString();
+                    Console.WriteLine(jsonModel);
+                    context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    await context.Response.WriteAsync(jsonModel);
+                }
+            }
+            
         }
     }
         public static class ApiErrorMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseApiError(
-            this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<ApiErrorMiddleware>();
+            public static IApplicationBuilder UseApiError(
+                this IApplicationBuilder builder)
+            {
+                return builder.UseMiddleware<ApiErrorMiddleware>();
+            }
         }
-    }
 }
