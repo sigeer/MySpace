@@ -50,7 +50,7 @@ namespace WebApi.Controllers.Admin
            return result;
        }
         [HttpGet]
-        public ResponseModel<List<ArticleSimple>> GetList(int index, int count)
+        public ResponseList<List<ArticleSimple>> GetList(int index, int count)
         {
             var start = (index - 1) * count;
             return ArticleSerivce.GetArticleList(DbContext, start, count);

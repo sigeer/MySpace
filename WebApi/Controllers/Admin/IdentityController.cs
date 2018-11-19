@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Model;
 using Utility;
+using Utility.Constans;
+using Utility.Exceptions;
 using Utility.QrCodeHelper;
 using ViewModel;
 
@@ -92,6 +94,10 @@ namespace WebApi.Controllers
         public Tuple<string,string> GetUser()
         {
             return new Tuple<string, string>( HttpContext.User.Identity.Name,HttpContext.User.Claims.ToList()[3].Value);
+        }
+        public void TestApi()
+        {
+            throw new SigeerException(Info.Invalid_FileName);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace ViewModel
                  new MySqlParameter("nohtml", article.Nohtml) });
             return result ?Message.Success:Message.Error;
         }
-        public static ResponseModel<List<ArticleSimple>> GetArticleList(DbContext db,int start,int count)
+        public static ResponseList<List<ArticleSimple>> GetArticleList(DbContext db,int start,int count)
         {
             MySqlParameter[] parameters = { new MySqlParameter("start", start), new MySqlParameter("count", count) };
             var dataCount = db.ExecuteQuery("select Count(*) from article");
@@ -68,7 +68,7 @@ namespace ViewModel
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
-            return new ResponseModel<List<ArticleSimple>>(list,Count);
+            return new ResponseList<List<ArticleSimple>>(list,Count);
         }
         public static bool Delete(DbContext db, int id)
         {
@@ -93,11 +93,11 @@ namespace ViewModel
                 ,parameters);
             return result ? Message.Success : Message.Error;
         }
-        public static ResponseModel<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
+        public static ResponseList<List<Comment>> GetCommentsInArticle(DbContext db ,int aId)
         {
             if (aId==0)
             {
-                return new ResponseModel<List<Comment>>();
+                return new ResponseList<List<Comment>>();
             }
             List<Comment> list = new List<Comment>();
             MySqlParameter[] parameters = { new MySqlParameter("aid", aId) };
@@ -116,17 +116,17 @@ namespace ViewModel
                 tt.CreateTime = flag ? dt : DateTime.MinValue;
                 list.Add(tt);
             }
-            return new ResponseModel<List<Comment>>(list,Count);
+            return new ResponseList<List<Comment>>(list,Count);
         }
-        public static ResponseModel<List<Comment>> GetCommentList(DbContext db,QueryModel queryModel)
+        public static ResponseList<List<Comment>> GetCommentList(DbContext db,QueryModel queryModel)
         {
             return GetList(db, queryModel, 1);
         }
-        public static ResponseModel<List<Comment>> GetCommentTrash(DbContext db, QueryModel queryModel)
+        public static ResponseList<List<Comment>> GetCommentTrash(DbContext db, QueryModel queryModel)
         {
             return GetList(db, queryModel, 2);
         }
-        public static ResponseModel<List<Comment>> GetList(DbContext db, QueryModel queryModel,int type)
+        public static ResponseList<List<Comment>> GetList(DbContext db, QueryModel queryModel,int type)
         {
             var start = (queryModel.Index - 1) * queryModel.Count;
 
@@ -181,7 +181,7 @@ namespace ViewModel
                 comment.Status = temp;
                 list.Add(comment);
             }
-            return new ResponseModel<List<Comment>>(list, Count);
+            return new ResponseList<List<Comment>>(list, Count);
         }
         public static bool Delete(DbContext dbContext,int id)
         {
