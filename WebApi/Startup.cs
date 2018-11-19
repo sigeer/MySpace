@@ -8,6 +8,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
+using WebApi.Middlewares;
+using Microsoft.AspNetCore.Diagnostics;
+using Utility;
+using Utility.Exceptions;
+using System.Threading.Tasks;
+using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApi
 {
@@ -69,9 +76,29 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler((handle)=>
+                {
+                    handle.Run(async context =>
+                    {
+                        var feature = context.Features.Get<IExceptionHandlerFeature>();
+                        var error = feature?.Error;
+                        if(error is SigeerException)
+                        {
+                            var myException = error as SigeerException;
+                            var jsonModel = new ResponseMessage("Request",Message.Error,myException.Message,myException.Params).ToString();
+                            Console.WriteLine(jsonModel);
+                            context.Response.StatusCode = (int)HttpStatusCode.OK;
+                            await context.Response.WriteAsync(jsonModel);
+                        }
+                    });
+                    
+                });
             }
 
             app.UseAuthentication();
@@ -83,9 +110,6 @@ namespace WebApi
                     name: "default",
                     template: "api/{controller}/{action}/{id?}");
             });
-
-
-
 
         }
     }

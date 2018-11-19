@@ -12,7 +12,7 @@ namespace WebApi.Controllers
     {
 
         [HttpGet]
-        public ResponseModel<List<ArticleSimple>> Index(int index, int count)
+        public ResponseList<List<ArticleSimple>> Index(int index, int count)
         {
             var start = (index - 1) * count;
             return  ArticleSerivce.GetArticleList(DbContext, start, count);
@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         {
             return ArticleSerivce.GetArticle(DbContext, id);
         }
-        public ResponseModel<List<Comment>> GetComment(int id)
+        public ResponseList<List<Comment>> GetComment(int id)
         {
             return CommentService.GetCommentsInArticle(DbContext, id);
         }

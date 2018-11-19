@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Utility;
+using Utility.Constans;
 using Utility.DbHelper;
 
 namespace WebApi.Controllers
@@ -51,7 +52,7 @@ namespace WebApi.Controllers
             result.OldName = fileName;
             if (fileName.Length > 100)
             {
-                result.Result = "UPLOAD_FILENAMEINVALID";
+                result.Result = Info.Invalid_FileName;
                 return result;
             }
             if (!AllowdFormat.IsAllowed(fileName, fileType))
@@ -59,10 +60,10 @@ namespace WebApi.Controllers
                 switch (fileType)
                 {
                     case FileType.Image:
-                        result.Result = "UPLOAD_IMAGE";
+                        result.Result = Info.File_OnlyImage;
                         break;
                     case FileType.Excel:
-                        result.Result = "UPLOAD_EXCEL";
+                        result.Result = Info.File_OnlyExcel;
                         break;
                     default:
                         break;
@@ -71,7 +72,7 @@ namespace WebApi.Controllers
             }
             if (item.Length > 1024 * 1024 * 20)
             {
-                result.Result = "UPLOAD_FILESIZE";
+                result.Result = Info.Invalid_FileSize;
                 return result;
             }
             string extension = string.Empty;
@@ -85,7 +86,7 @@ namespace WebApi.Controllers
                 var filePath = await SaveFiles(targetPath, tempFileName.ToString(), s);
                 if (string.IsNullOrEmpty(filePath))
                 {
-                    result.Result = "UPLOAD_OTHERERROR";
+                    result.Result = Info.File_Others;
                     return result;
                     //非代码控制的其他原因导致的上传失败
                 }

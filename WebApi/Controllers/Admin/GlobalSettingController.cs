@@ -16,6 +16,7 @@ namespace WebApi.Controllers.Admin
            foreach (var item in forms)
            {
                Console.WriteLine(item.Key + ":" + item.Value);
+               Console.WriteLine("---------------------");
            }
         }
     }

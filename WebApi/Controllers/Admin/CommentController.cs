@@ -16,14 +16,14 @@ namespace WebApi.Controllers.Admin
     public class CommentController : BaseApiController
     {
         [HttpGet]
-        public ResponseModel<List<Comment>> GetList(int index,int count,string order,int? articleid = null,int? posterid = null,
+        public ResponseList<List<Comment>> GetList(int index,int count,string order,int? articleid = null,int? posterid = null,
                 string str=null,int? status = null)
         {
             QueryModel queryModel = new QueryModel(index,count,order, articleid, posterid, str, status);
             return CommentService.GetCommentList(DbContext, queryModel);
         }
         [HttpGet]
-        public ResponseModel<List<Comment>> GetTrash(int index, int count, string order, int? articleid = null, int? posterid = null,
+        public ResponseList<List<Comment>> GetTrash(int index, int count, string order, int? articleid = null, int? posterid = null,
                 string str = null, int? status = null)
         {
             QueryModel queryModel = new QueryModel(index, count, order, articleid, posterid, str, status);
@@ -40,10 +40,10 @@ namespace WebApi.Controllers.Admin
             return CommentService.Modify(DbContext, jObject["id"].Value<int>(), jObject["status"].Value<int>());
         }
         [HttpGet]
-        public ResponseModel<List<KeyValue>> GetBase()
+        public ResponseList<List<KeyValue>> GetBase()
         {
             var data =  CommentService.GetBaseSettings(DbContext);
-            return new ResponseModel<List<KeyValue>>(data,data.Count);
+            return new ResponseList<List<KeyValue>>(data,data.Count);
         }
     }
 }
